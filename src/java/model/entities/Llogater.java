@@ -21,7 +21,7 @@ import javax.ws.rs.Path;
     @NamedQuery(name="tenant.deleteInfo", query="SELECT r FROM Habitacio r WHERE r.id = :id")
 })
 public class Llogater implements Serializable{
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Llogater_Gen")
     private int id;
     
     @Embedded

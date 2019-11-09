@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name="room.deleteInfo", query="SELECT r FROM Habitacio r WHERE r.id = :id")
 })
 public class Habitacio implements Serializable{
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Habitacio_Gen")
     private int idHabitacio;
     private String descripcio;
     private String adresa;

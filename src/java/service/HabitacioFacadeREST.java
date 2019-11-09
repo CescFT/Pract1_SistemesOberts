@@ -29,7 +29,7 @@ import model.entities.Habitacio;
 @Stateless
 @Path("/room")
 public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
-    @PersistenceContext(unitName = "lab10_wspu") //Aixo fa que sigui un container, i no haver de fer us del commit i transaction i tot aixo
+    @PersistenceContext(unitName = "Homework1PU") //Aixo fa que sigui un container, i no haver de fer us del commit i transaction i tot aixo
                                                  //Lo de lab10_wspu esta dins del fitxer persistence.xml a <persistence-unit>
     private EntityManager em;
 
