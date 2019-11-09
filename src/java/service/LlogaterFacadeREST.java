@@ -19,7 +19,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
-import model.dades.Llogater;
+import model.entities.Llogater;
 
 /**
  *
