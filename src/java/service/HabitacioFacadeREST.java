@@ -67,7 +67,7 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
     @GET
     @Path("{id}")
     @Produces({"application/json"})
-    public Response find(@PathParam("id") Integer id) {
+    public Response find(@PathParam("id") int id) {
         
         Habitacio hab = super.find(id);
         if(hab != null){

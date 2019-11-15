@@ -42,7 +42,7 @@ public abstract class AbstractFacade<T> {
     
     public List<Habitacio> findRoomsWithCriteria(String criteria){
         TypedQuery<Habitacio> query = (TypedQuery<Habitacio>) getEntityManager()
-                .createNamedQuery("room.findAll")
+                .createNamedQuery("room.findAllCondicional")
                 .setParameter("criterion", criteria);
         
         return query.getResultList();

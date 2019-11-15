@@ -17,8 +17,8 @@ import javax.ws.rs.Path;
 @NamedQueries({
     @NamedQuery(name="tenant.findAll", query="SELECT r FROM Llogater r"),
     @NamedQuery(name="tenant.information", query="SELECT r FROM Llogater r WHERE r.id = :id AND r.autenticat=TRUE"),
-    @NamedQuery(name="tenant.updateInfo", query="SELECT r FROM Habitacio r WHERE r.id = :id"),
-    @NamedQuery(name="tenant.deleteInfo", query="SELECT r FROM Habitacio r WHERE r.id = :id")
+    @NamedQuery(name="tenant.updateInfo", query="SELECT r FROM Llogater r WHERE r.id = :id"),
+    @NamedQuery(name="tenant.deleteInfo", query="SELECT r FROM Llogater r WHERE r.id = :id")
 })
 public class Llogater implements Serializable{
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Llogater_Gen")
