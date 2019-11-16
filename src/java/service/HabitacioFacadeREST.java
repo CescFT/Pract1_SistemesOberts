@@ -17,6 +17,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import model.entities.Habitacio;
@@ -77,9 +78,9 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
     }
     
     @GET
-    @Path("{location}/{sort}")
+    @Path("{location}&{sort}")
     @Produces({"application/json"})
-    public Response find(@PathParam("location") String city, @PathParam("sort") String criterion) {
+    public Response find(@QueryParam("location") String city, @QueryParam("sort") String criterion) {
         List<Habitacio> llistaHabitacions = new ArrayList<Habitacio>();
         if(criterion.equals("")){
             return Response.status(Response.Status.BAD_REQUEST).entity("Falta criteri.").build();
