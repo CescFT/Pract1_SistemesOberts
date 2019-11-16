@@ -8,11 +8,13 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 import javax.ws.rs.Path;
+import javax.xml.bind.annotation.XmlRootElement;
 /**
  *
  * @author Cesc
  */
 @Entity
+@XmlRootElement
 @Path("/tenant")
 @NamedQueries({
     @NamedQuery(name="tenant.findAll", query="SELECT r FROM Llogater r"),
@@ -21,8 +23,9 @@ import javax.ws.rs.Path;
     @NamedQuery(name="tenant.deleteInfo", query="SELECT r FROM Llogater r WHERE r.id = :id")
 })
 public class Llogater implements Serializable{
+    private static final long serialVersionUID = 1L;
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Llogater_Gen")
-    private int id;
+    private Long id;
     
     @Embedded
     private informacioLlogater info;
@@ -50,11 +53,11 @@ public class Llogater implements Serializable{
             habitacions.add(h);
     }
     
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -74,6 +77,27 @@ public class Llogater implements Serializable{
         this.habitacions = habitacions;
     }
 
+    
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Llogater)) {
+            return false;
+        }
+        Llogater other = (Llogater) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id !=null ? id.hashCode() : 0);
+        return hash;
+    }
+    
+    
     @Override
     public String toString() {
         return "Llogater{" + "id=" + id + ", info=" + info + ", autenticat=" + autenticat + ", habitacions=" + habitacions + '}';

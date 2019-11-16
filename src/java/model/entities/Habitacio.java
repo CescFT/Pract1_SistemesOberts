@@ -7,6 +7,7 @@ package model.entities;
 import javax.persistence.*;
 import java.io.Serializable;
 
+
 import javax.xml.bind.annotation.XmlRootElement;
 /**
  *
@@ -23,8 +24,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name="room.deleteInfo", query="SELECT r FROM Habitacio r WHERE r.idHabitacio = :id")
 })
 public class Habitacio implements Serializable{
+    private static final long serialVersionUID = 1L;
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Habitacio_Gen")
-    private int idHabitacio;
+    private Long idHabitacio;
     private String descripcio;
     private String adresa;
     private String ciutat;
@@ -34,7 +36,7 @@ public class Habitacio implements Serializable{
     private float preuMes;
     
     @Embedded
-    private Requeriment requeriment; //N habitacions -> 1 requeriment
+    private Requeriment requeriment; 
 
     @ManyToOne
     private Llogater llogater;
@@ -59,11 +61,11 @@ public class Habitacio implements Serializable{
         
     }
 
-    public int getIdHabitacio() {
+    public Long getIdHabitacio() {
         return idHabitacio;
     }
 
-    public void setIdHabitacio(int idHabitacio) {
+    public void setIdHabitacio(Long idHabitacio) {
         this.idHabitacio = idHabitacio;
     }
 
@@ -105,6 +107,25 @@ public class Habitacio implements Serializable{
 
     public void setRequeriment(Requeriment requeriment) {
         this.requeriment = requeriment;
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Habitacio)) {
+            return false;
+        }
+        Habitacio other = (Habitacio) object;
+        if ((this.idHabitacio == null && other.idHabitacio != null) || (this.idHabitacio != null && !this.idHabitacio.equals(other.idHabitacio))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (idHabitacio !=null ? idHabitacio.hashCode() : 0);
+        return hash;
     }
 
     @Override
