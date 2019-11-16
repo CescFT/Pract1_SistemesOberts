@@ -41,19 +41,30 @@ public abstract class AbstractFacade<T> {
 
     
     public List<Habitacio> findRoomsWithCriteria(String criteria){
-        TypedQuery<Habitacio> query = (TypedQuery<Habitacio>) getEntityManager()
-                .createNamedQuery("room.findAllCondicional")
-                .setParameter("criterion", criteria);
+        TypedQuery<Habitacio> query;
+        if(criteria.toUpperCase().equals("ASC")){
+            query = (TypedQuery<Habitacio>) getEntityManager()
+                .createNamedQuery("room.findAllCondicionalASC");
+        }else{
+            query = (TypedQuery<Habitacio>) getEntityManager()
+                .createNamedQuery("room.findAllCondicionalDESC");
+        }
         
         return query.getResultList();
     }
     
     public List<Habitacio> findRoomsWithCityAndCriteria(String city, String criteria){
-        TypedQuery<Habitacio> query = (TypedQuery<Habitacio>) getEntityManager()
-                .createNamedQuery("room.findAllCondicional")
-                .setParameter("city", city)
-                .setParameter("criterion", criteria);
-        
+        TypedQuery <Habitacio> query;
+        if(criteria.toUpperCase().equals("ASC")){
+            query = (TypedQuery<Habitacio>) getEntityManager()
+                .createNamedQuery("room.findAllCondicionalASC")
+                .setParameter("city", city);
+        }else{
+            query = (TypedQuery<Habitacio>) getEntityManager()
+                .createNamedQuery("room.findAllCondicionalDESC")
+                .setParameter("city", city);
+        }
+
         return query.getResultList();
     }
     
