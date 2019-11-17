@@ -18,9 +18,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Path("/tenant")
 @NamedQueries({
     @NamedQuery(name="tenant.findAll", query="SELECT r FROM Llogater r"),
-    @NamedQuery(name="tenant.information", query="SELECT r FROM Llogater r WHERE r.id = :id AND r.autenticat=TRUE"),
-    @NamedQuery(name="tenant.updateInfo", query="SELECT r FROM Llogater r WHERE r.id = :id"),
-    @NamedQuery(name="tenant.deleteInfo", query="SELECT r FROM Llogater r WHERE r.id = :id")
+    @NamedQuery(name="tenant.information", query="SELECT r FROM Llogater r WHERE r.id = :id"),
+    //@NamedQuery(name="tenant.updateInfo", query="SELECT r FROM Llogater r WHERE r.id = :id"),
+    //@NamedQuery(name="tenant.deleteInfo", query="SELECT r FROM Llogater r WHERE r.id = :id")
 })
 public class Llogater implements Serializable{
     private static final long serialVersionUID = 1L;
