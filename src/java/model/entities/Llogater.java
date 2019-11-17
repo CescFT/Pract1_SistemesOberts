@@ -30,7 +30,6 @@ public class Llogater implements Serializable{
     @Embedded
     private informacioLlogater info;
     
-    private boolean autenticat;
     
     @OneToMany(mappedBy="llogater")
     private Collection<Habitacio> habitacions;
@@ -39,14 +38,7 @@ public class Llogater implements Serializable{
         habitacions = new ArrayList<Habitacio>();
     }
 
-    public boolean isAutenticat() {
-        return autenticat;
-    }
-
-    public void setAutenticat(boolean autenticat) {
-        this.autenticat = autenticat;
-    }
-
+    
     
     public void addHabitacio(Habitacio h){
         if (h!=null && !habitacions.contains(h))
@@ -96,12 +88,13 @@ public class Llogater implements Serializable{
         hash += (id !=null ? id.hashCode() : 0);
         return hash;
     }
-    
-    
+
     @Override
     public String toString() {
-        return "Llogater{" + "id=" + id + ", info=" + info + ", autenticat=" + autenticat + ", habitacions=" + habitacions + '}';
+        return "Llogater{" + "id=" + id + ", info=" + info + ", habitacions=" + habitacions + '}';
     }
-
+    
+    
+    
     
 }
