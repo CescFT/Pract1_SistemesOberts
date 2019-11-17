@@ -78,7 +78,7 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
     }
     
     @GET
-    @Path("{location}&{sort}")
+    @Path("")
     @Produces({"application/json"})
     public Response find(@QueryParam("location") String city, @QueryParam("sort") String criterion) {
         List<Habitacio> llistaHabitacions = new ArrayList<Habitacio>();
