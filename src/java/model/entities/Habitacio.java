@@ -6,6 +6,7 @@
 package model.entities;
 import javax.persistence.*;
 import java.io.Serializable;
+import javax.validation.constraints.*;
 
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -25,14 +26,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class Habitacio implements Serializable{
     private static final long serialVersionUID = 1L;
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Habitacio_Gen")
+    @Id @NotNull @Column(name="HABITACIO_ID")@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Habitacio_Gen")
     private Long idHabitacio;
-    private String descripcio;
+    @Size(max=200) @Column(name="DESCRIPCIO")
+    private String descripcio; 
+    @Column(name="ADREÇA") @Size(max=20)
     private String adresa;
+    @Column(name="CIUTAT") @Size(max=10)
     private String ciutat;
     
     @Enumerated(EnumType.STRING)
     private TipusHabitacio tipus;
+    @Column(name="PREU_MES")
     private float preuMes;
     
     @Embedded

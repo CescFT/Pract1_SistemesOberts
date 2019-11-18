@@ -6,17 +6,19 @@
 package model.entities;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.Size;
 /**
  *
  * @author Cesc
  */
 @Embeddable
 public class informacioLlogater implements Serializable{
-    
+    @Column(name="NOM_LLOGATER") @Size(max=30)
     private String nom;
-       
+    @Column(name="COGNOM_LLOGATER") @Size(max=30)
     private String cognom;
     
     @Enumerated(EnumType.STRING)
