@@ -18,34 +18,45 @@ public class Requeriment implements Serializable{
     @Enumerated(EnumType.STRING)
     private SexeLlogater sexe;
     
-    private Collection<Integer> rangEdat;
+    private int rangEdatMin;
+    private int rangEdatMax;
     
     private boolean fumador;
     
     private boolean mascotes;
     
     public Requeriment(){
-        rangEdat = new ArrayList<Integer>();
-    }
-    
-    public void setRang(int min, int max){
-        if(max < min){
-            min = max;
-            max = min;
-            if(min>99) min = 99;
-            if(max<0) max = 0;
-        }else{
-            if(min<0) min = 0;
-            if(max>99) max = 99;
-        } 
-        rangEdat.add(min);
-        rangEdat.add(max);
-    }
-    
-    public Collection<Integer> getRang(){
-        return rangEdat;
+        
     }
 
+    public int getRangEdatMin() {
+        return rangEdatMin;
+    }
+
+    public void setRangEdatMin(int rangEdatMin) {
+        if(rangEdatMin < 0 ) this.rangEdatMin = 0;
+        else this.rangEdatMin = rangEdatMin;
+        
+        if(this.rangEdatMax < this.rangEdatMin){
+            this.rangEdatMin = this.rangEdatMax;
+            this.rangEdatMax = this.rangEdatMin;
+        }
+    }
+
+    public int getRangEdatMax() {
+        return rangEdatMax;
+    }
+
+    public void setRangEdatMax(int rangEdatMax) {
+        if(rangEdatMax > 99) this.rangEdatMax = 99;
+        else this.rangEdatMax = rangEdatMax;
+        
+        if(this.rangEdatMin > this.rangEdatMax){
+            this.rangEdatMax = this.rangEdatMin;
+            this.rangEdatMin = this.rangEdatMax;
+        }
+    }
+    
     
     public SexeLlogater getSexe() {
         return sexe;
@@ -71,10 +82,7 @@ public class Requeriment implements Serializable{
         this.mascotes = mascotes;
     }
 
-    @Override
-    public String toString() {
-        return "Requeriment{" + "sexe=" + sexe + ", rangEdat=" + rangEdat + ", fumador=" + fumador + ", mascotes=" + mascotes + '}';
-    }
+    
 
     
     
