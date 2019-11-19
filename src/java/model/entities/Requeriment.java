@@ -21,9 +21,9 @@ public class Requeriment implements Serializable{
     private int rangEdatMin;
     private int rangEdatMax;
     
-    private boolean fumador;
+    private Boolean fumador;
     
-    private boolean mascotes;
+    private Boolean mascotes;
     
     public Requeriment(){
         
