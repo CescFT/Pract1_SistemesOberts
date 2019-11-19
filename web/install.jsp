@@ -1,6 +1,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ page import = "java.sql.*" %>
 <%@ page import = "model.entities.*" %>
+<%@ page import = "java.util.*" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -53,15 +54,23 @@
             }
             
             //Aqui hauriem de recuperar d'alguna manera la columna dels id dels paios i assignar-li un a cadascun.... per aixo ho he separat
-            
+            List<String> idsLlogaters = new ArrayList<String>();
+            ResultSet result = stmt.executeQuery("SELECT ID FROM LLOGATER");
+            while(result.next()){
+                idsLlogaters.add(String.valueOf(result.getInt("ID")));
+            }
+            for(String s : idsLlogaters)
+            {
+                out.println("<pre> -> " + s + "<pre>");
+            }
             String dataHabitacions[] = new String[]{
-              //recuperar el id de un Llogater?¿?¿?¿?
-                "INSERT INTO " + schema + ".HABITACIO (HABITACIO_ID, ADREÇA, CIUTAT, DESCRIPCIO, PREU_MES, TIPUS, FUMADOR, MASCOTES, RANGEDATMAX,RANGEDATMIN,SEXE,LLOGATER_ID) VALUES (NEXT VALUE FOR HABITACIO_GEN,'C/Mossen martí 33 3r 3a', 'Valls','descripcio habitacio 1',500.10,'simple',1,1,30,50,'unisex',null)", 
-                "INSERT INTO " + schema + ".HABITACIO (HABITACIO_ID, ADREÇA, CIUTAT, DESCRIPCIO, PREU_MES, TIPUS, FUMADOR, MASCOTES, RANGEDATMAX,RANGEDATMIN,SEXE,LLOGATER_ID) VALUES (NEXT VALUE FOR HABITACIO_GEN, 'C/Major 72','Montferri','descripcio habitacio 2',400,'doble',1,1,30,50,'unisex',null)",
-                "INSERT INTO " + schema + ".HABITACIO (HABITACIO_ID, ADREÇA, CIUTAT, DESCRIPCIO, PREU_MES, TIPUS, FUMADOR, MASCOTES, RANGEDATMAX,RANGEDATMIN,SEXE,LLOGATER_ID) VALUES (NEXT VALUE FOR HABITACIO_GEN, 'Avda. Paisos Catalans 12', 'Reus', 'descripcio habitacio 3',600.10,'moblada',1,1,30,50,'unisex',null)",
-                "INSERT INTO " + schema + ".HABITACIO (HABITACIO_ID, ADREÇA, CIUTAT, DESCRIPCIO, PREU_MES, TIPUS, FUMADOR, MASCOTES, RANGEDATMAX,RANGEDATMIN,SEXE,LLOGATER_ID) VALUES (NEXT VALUE FOR HABITACIO_GEN, 'Rambla nova 5', 'Tarragona','descripcio habitacio 4',100.22,'interior',0, 0, 40,60,'home',null)",
-                "INSERT INTO " + schema + ".HABITACIO (HABITACIO_ID, ADREÇA, CIUTAT, DESCRIPCIO, PREU_MES, TIPUS, FUMADOR, MASCOTES, RANGEDATMAX,RANGEDATMIN,SEXE,LLOGATER_ID) VALUES (NEXT VALUE FOR HABITACIO_GEN, 'C/Rafael de Casanova', 'Valls','descripcio habitacio 5',120.33,'exterior',0, 0,40,60,'home',null)",
-                "INSERT INTO " + schema + ".HABITACIO (HABITACIO_ID, ADREÇA, CIUTAT, DESCRIPCIO, PREU_MES, TIPUS, FUMADOR, MASCOTES, RANGEDATMAX,RANGEDATMIN,SEXE,LLOGATER_ID) VALUES (NEXT VALUE FOR HABITACIO_GEN, 'Avda. Catalunya 2', 'Vallmoll','descripcio habitacio 6',200.10 ,'simple', 0, 0,40,60,'home',null)"  
+              
+                "INSERT INTO " + schema + ".HABITACIO (HABITACIO_ID, ADREÇA, CIUTAT, DESCRIPCIO, PREU_MES, TIPUS, FUMADOR, MASCOTES, RANGEDATMAX,RANGEDATMIN,SEXE,LLOGATER_ID) VALUES (NEXT VALUE FOR HABITACIO_GEN,'C/Mossen martí 33 3r 3a', 'Valls','descripcio habitacio 1',500.10,'simple',1,1,30,50,'unisex',"+idsLlogaters.get(0)+")", 
+                "INSERT INTO " + schema + ".HABITACIO (HABITACIO_ID, ADREÇA, CIUTAT, DESCRIPCIO, PREU_MES, TIPUS, FUMADOR, MASCOTES, RANGEDATMAX,RANGEDATMIN,SEXE,LLOGATER_ID) VALUES (NEXT VALUE FOR HABITACIO_GEN, 'C/Major 72','Montferri','descripcio habitacio 2',400,'doble',1,1,30,50,'unisex',"+idsLlogaters.get(1)+")",
+                "INSERT INTO " + schema + ".HABITACIO (HABITACIO_ID, ADREÇA, CIUTAT, DESCRIPCIO, PREU_MES, TIPUS, FUMADOR, MASCOTES, RANGEDATMAX,RANGEDATMIN,SEXE,LLOGATER_ID) VALUES (NEXT VALUE FOR HABITACIO_GEN, 'Avda. Paisos Catalans 12', 'Reus', 'descripcio habitacio 3',600.10,'moblada',1,1,30,50,'unisex',"+idsLlogaters.get(2)+")",
+                "INSERT INTO " + schema + ".HABITACIO (HABITACIO_ID, ADREÇA, CIUTAT, DESCRIPCIO, PREU_MES, TIPUS, FUMADOR, MASCOTES, RANGEDATMAX,RANGEDATMIN,SEXE,LLOGATER_ID) VALUES (NEXT VALUE FOR HABITACIO_GEN, 'Rambla nova 5', 'Tarragona','descripcio habitacio 4',100.22,'interior',0, 0, 40,60,'home',"+idsLlogaters.get(3)+")",
+                "INSERT INTO " + schema + ".HABITACIO (HABITACIO_ID, ADREÇA, CIUTAT, DESCRIPCIO, PREU_MES, TIPUS, FUMADOR, MASCOTES, RANGEDATMAX,RANGEDATMIN,SEXE,LLOGATER_ID) VALUES (NEXT VALUE FOR HABITACIO_GEN, 'C/Rafael de Casanova', 'Valls','descripcio habitacio 5',120.33,'exterior',0, 0,40,60,'home',"+idsLlogaters.get(4)+")",
+                "INSERT INTO " + schema + ".HABITACIO (HABITACIO_ID, ADREÇA, CIUTAT, DESCRIPCIO, PREU_MES, TIPUS, FUMADOR, MASCOTES, RANGEDATMAX,RANGEDATMIN,SEXE,LLOGATER_ID) VALUES (NEXT VALUE FOR HABITACIO_GEN, 'Avda. Catalunya 2', 'Vallmoll','descripcio habitacio 6',200.10 ,'simple', 0, 0,40,60,'home',"+idsLlogaters.get(5)+")"  
                 
                 
             };
