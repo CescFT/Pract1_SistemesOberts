@@ -19,6 +19,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import model.entities.Habitacio;
 
@@ -64,17 +65,25 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
         
         return Response.status(Response.Status.BAD_REQUEST).entity("Id no disponible").build();
     }
-
+    
+    
+    
     @GET
     @Path("{id}")
     @Produces({"application/json"})
-    public Response find(@PathParam("id") int id) {
-        
-        Habitacio hab = super.find(id);
+    public Response find(@PathParam("id") Integer id) {
+        if(id == null)
+            return Response.status(Response.Status.FORBIDDEN).build();
+        Habitacio hab = super.find(Long.valueOf(id));
         if(hab != null){
-            return Response.status(200).entity(hab).build();
+            return Response.ok(hab, MediaType.APPLICATION_JSON).build();
+        }else {
+            return Response.status(404).build();
         }
-        return Response.status(Response.Status.BAD_REQUEST).entity("Id no disponible").build();
+        //return Response.status(Response.Status.BAD_REQUEST).entity("Id no disponible"+id).build();
+        //return Response.status(200).entity("putaspanya").build();
+        
+        
     }
     
     @GET

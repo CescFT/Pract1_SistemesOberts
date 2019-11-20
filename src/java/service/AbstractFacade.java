@@ -9,7 +9,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import model.entities.Habitacio;
 import model.entities.Llogater;
-
+import javax.validation.ConstraintViolationException;
+import javax.validation.ConstraintViolation;
 /**
  *
  * @author Administrador
@@ -24,7 +25,14 @@ public abstract class AbstractFacade<T> {
     protected abstract EntityManager getEntityManager();
 
     public void create(T entity) {
-        getEntityManager().persist(entity);
+        try{
+            getEntityManager().persist(entity);
+        }catch(ConstraintViolationException e){
+            for (ConstraintViolation actual : e.getConstraintViolations()) {
+             System.out.println(actual.toString());
+            }
+        }
+        
     }
 
     public void edit(T entity) {
@@ -38,7 +46,17 @@ public abstract class AbstractFacade<T> {
     public T find(Object id) {
         return getEntityManager().find(entityClass, id);
     }
+    
+    public Habitacio findWithId(int id){
+        
+        TypedQuery<Habitacio> query =(TypedQuery<Habitacio>) getEntityManager().createNamedQuery("room.information");
+        return query.getSingleResult();
+    }
 
+    public List<Habitacio> findAllRooms(){
+        TypedQuery<Habitacio> query = (TypedQuery<Habitacio>)getEntityManager().createNamedQuery("room.allRooms");
+        return query.getResultList();
+    }
     
     public List<Habitacio> findRoomsWithCriteria(String criteria){
         TypedQuery<Habitacio> query;

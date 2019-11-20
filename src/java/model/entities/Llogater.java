@@ -31,20 +31,6 @@ public class Llogater implements Serializable{
     private informacioLlogater info;
     
     
-    @OneToMany(mappedBy="llogater")
-    private Collection<Habitacio> habitacions;
-
-    public Llogater() {
-        habitacions = new ArrayList<Habitacio>();
-    }
-
-    
-    
-    public void addHabitacio(Habitacio h){
-        if (h!=null && !habitacions.contains(h))
-            habitacions.add(h);
-    }
-    
     public Long getId() {
         return id;
     }
@@ -61,13 +47,7 @@ public class Llogater implements Serializable{
         this.info = info;
     }
 
-    public Collection<Habitacio> getHabitacions() {
-        return habitacions;
-    }
-
-    public void setHabitacions(Collection<Habitacio> habitacions) {
-        this.habitacions = habitacions;
-    }
+    
 
     
     @Override
@@ -91,8 +71,12 @@ public class Llogater implements Serializable{
 
     @Override
     public String toString() {
-        return "Llogater{" + "id=" + id + ", info=" + info + ", habitacions=" + habitacions + '}';
+        return "Llogater{" + "id=" + id + ", info=" + info + '}';
     }
+
+    
+    
+    
     
     
     

@@ -6,7 +6,7 @@
 package model.entities;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.*;
+
 /**
  *
  * @author Cesc
@@ -15,8 +15,11 @@ import java.util.*;
 public class Requeriment implements Serializable{
     
     
-    @Enumerated(EnumType.STRING)
-    private SexeLlogater sexe;
+    private boolean home;
+    
+    private boolean dona;
+    
+    private boolean unisex;
     
     private int rangEdatMin;
     private int rangEdatMax;
@@ -28,6 +31,32 @@ public class Requeriment implements Serializable{
     public Requeriment(){
         
     }
+
+    public boolean isHome() {
+        return home;
+    }
+
+    public void setHome(boolean home) {
+        this.home = home;
+    }
+
+    public boolean isDona() {
+        return dona;
+    }
+
+    public void setDona(boolean dona) {
+        this.dona = dona;
+    }
+
+    public boolean isUnisex() {
+        return unisex;
+    }
+
+    public void setUnisex(boolean unisex) {
+        this.unisex = unisex;
+    }
+    
+    
 
     public int getRangEdatMin() {
         return rangEdatMin;
@@ -58,13 +87,7 @@ public class Requeriment implements Serializable{
     }
     
     
-    public SexeLlogater getSexe() {
-        return sexe;
-    }
-
-    public void setSexe(SexeLlogater sexe) {
-        this.sexe = sexe;
-    }
+    
 
     public boolean isFumador() {
         return fumador;

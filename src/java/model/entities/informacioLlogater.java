@@ -7,8 +7,7 @@ package model.entities;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+
 import javax.validation.constraints.Size;
 /**
  *
@@ -21,8 +20,10 @@ public class informacioLlogater implements Serializable{
     @Column(name="COGNOM_LLOGATER") @Size(max=30)
     private String cognom;
     
-    @Enumerated(EnumType.STRING)
-    private SexeLlogater sexe;
+    private boolean home;
+    
+    private boolean dona;
+    
 
     public String getNom() {
         return nom;
@@ -40,13 +41,23 @@ public class informacioLlogater implements Serializable{
         this.cognom = cognom;
     }
 
-    public SexeLlogater getSexe() {
-        return sexe;
+    public boolean isHome() {
+        return home;
     }
 
-    public void setSexe(SexeLlogater sexe) {
-        this.sexe = sexe;
+    public void setHome(boolean home) {
+        this.home = home;
     }
+
+    public boolean isDona() {
+        return dona;
+    }
+
+    public void setDona(boolean dona) {
+        this.dona = dona;
+    }
+
+    
     
     
     
