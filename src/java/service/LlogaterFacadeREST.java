@@ -54,9 +54,9 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     @Path("{id}")
     public Response remove(@PathParam("id") Integer id) {
         
-        Llogater tenant = super.find(id);
+        Llogater tenant = super.find(Long.valueOf(id));
         if (tenant != null){
-            super.remove(super.find(id));
+            super.remove(tenant);
             return Response.ok().entity("Llogater "+id+" eliminat").build();
         }
         return Response.status(Response.Status.BAD_REQUEST).entity(id+" no disponible").build();
@@ -67,7 +67,7 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     @Produces({"application/json"})
     public Response find(@PathParam("id") Integer id) {
         
-        Llogater tenant = super.find(id);
+        Llogater tenant = super.find(Long.valueOf(id));
         if (tenant != null){
             return Response.ok().entity(tenant).build();
         }

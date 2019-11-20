@@ -17,13 +17,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name="room.findAllCondicionalASC", query="SELECT r FROM Habitacio r WHERE r.ciutat =:city ORDER BY r.preuMes ASC"), //criterion ha de ser ASC o DESC
-    @NamedQuery(name="room.findAllCondicionalDESC", query="SELECT r FROM Habitacio r WHERE r.ciutat =:city ORDER BY r.preuMes DESC"), //criterion ha de ser ASC o DESC
+    @NamedQuery(name="room.findAllCondicionalASC", query="SELECT r FROM Habitacio r WHERE r.ciutat =:location ORDER BY r.preuMes ASC"), //criterion ha de ser ASC o DESC
+    @NamedQuery(name="room.findAllCondicionalDESC", query="SELECT r FROM Habitacio r WHERE r.ciutat =:location ORDER BY r.preuMes DESC"), //criterion ha de ser ASC o DESC
     //@NamedQuery(name="room.findAll", query="SELECT r FROM Habitacio r ORDER BY r.preuMes :criterion"),
     @NamedQuery(name="room.information", query="SELECT r FROM Habitacio r WHERE r.idHabitacio = :id"),
     @NamedQuery(name="room.updateInfo", query="SELECT r FROM Habitacio r WHERE r.idHabitacio = :id"),
     @NamedQuery(name="room.deleteInfo", query="SELECT r FROM Habitacio r WHERE r.idHabitacio = :id"),
-    @NamedQuery(name="room.allRooms", query="SELECT r FROM Habitacio r")
+    @NamedQuery(name="room.allRooms", query="SELECT r FROM Habitacio r"),
+    @NamedQuery(name="room.allRoomsASC", query="SELECT r FROM Habitacio r ORDER BY r.preuMes ASC"),
+    @NamedQuery(name="room.allRoomsDESC", query="SELECT r FROM Habitacio r ORDER BY r.preuMes DESC")
 })
 public class Habitacio implements Serializable{
     private static final long serialVersionUID = 1L;

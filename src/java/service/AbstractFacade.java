@@ -34,6 +34,11 @@ public abstract class AbstractFacade<T> {
         }
         
     }
+    public List<T> findAll() {
+        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        cq.select(cq.from(entityClass));
+        return getEntityManager().createQuery(cq).getResultList();
+    }
 
     public void edit(T entity) {
         getEntityManager().merge(entity);
@@ -62,25 +67,24 @@ public abstract class AbstractFacade<T> {
         TypedQuery<Habitacio> query;
         if(criteria.toUpperCase().equals("ASC")){
             query = (TypedQuery<Habitacio>) getEntityManager()
-                .createNamedQuery("room.findAllCondicionalASC");
+                .createNamedQuery("room.allRoomsASC");
         }else{
             query = (TypedQuery<Habitacio>) getEntityManager()
-                .createNamedQuery("room.findAllCondicionalDESC");
+                .createNamedQuery("room.allRoomsDESC");
         }
-        
         return query.getResultList();
     }
     
-    public List<Habitacio> findRoomsWithCityAndCriteria(String city, String criteria){
+    public List<Habitacio> findRoomsWithCityAndCriteria(String location, String criteria){
         TypedQuery <Habitacio> query;
         if(criteria.toUpperCase().equals("ASC")){
             query = (TypedQuery<Habitacio>) getEntityManager()
                 .createNamedQuery("room.findAllCondicionalASC")
-                .setParameter("city", city);
+                .setParameter("location", location);
         }else{
             query = (TypedQuery<Habitacio>) getEntityManager()
                 .createNamedQuery("room.findAllCondicionalDESC")
-                .setParameter("city", city);
+                .setParameter("location", location);
         }
 
         return query.getResultList();

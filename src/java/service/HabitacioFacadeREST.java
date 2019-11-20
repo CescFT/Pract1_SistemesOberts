@@ -55,11 +55,12 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
 
     @DELETE
     @Path("{id}")
+    //posar com a metode DELETE i la url: http://localhost:8080/Pract1_SistemesOberts/webresources/room/id
     public Response remove(@PathParam("id") Integer id) {
         
-        Habitacio hab = super.find(id);
+        Habitacio hab = super.find(Long.valueOf(id));
         if(hab!= null){
-            super.remove(super.find(id));
+            super.remove(hab);
             return Response.ok().entity("Habitacio "+id+" esborrada.").build();
         }
         
@@ -71,6 +72,7 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
     @GET
     @Path("{id}")
     @Produces({"application/json"})
+    //http://localhost:8080/Pract1_SistemesOberts/webresources/room/id
     public Response find(@PathParam("id") Integer id) {
         if(id == null)
             return Response.status(Response.Status.FORBIDDEN).build();
@@ -80,30 +82,39 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
         }else {
             return Response.status(404).build();
         }
-        //return Response.status(Response.Status.BAD_REQUEST).entity("Id no disponible"+id).build();
-        //return Response.status(200).entity("putaspanya").build();
-        
         
     }
     
     @GET
     @Produces({"application/json"})
-    public Response find(@QueryParam("location") String city, @QueryParam("sort") String criterion) {
+    //http://localhost:8080/Pract1_SistemesOberts/webresources/room?location=Valls&sort=asc
+    //http://localhost:8080/Pract1_SistemesOberts/webresources/room?location&sort=asc   ---> aquest no funcionaaa
+    public Response find(@QueryParam("location") String location, @QueryParam("sort") String criterion) {
         List<Habitacio> llistaHabitacions = new ArrayList<Habitacio>();
         if(criterion.equals("")){
             return Response.status(Response.Status.BAD_REQUEST).entity("Falta criteri.").build();
         }
-        if (!city.equals("")){
-            //retornar totes les habitacions
-             llistaHabitacions = super.findRoomsWithCriteria(criterion);
-        }else{
+        
+        try{
+            if (!location.equals("")&& !criterion.equals("")){
             //retornar les habitacions que siguin duna ciutat i el criteri de ordenacio
-            llistaHabitacions = super.findRoomsWithCityAndCriteria(city, criterion);
+                llistaHabitacions = super.findRoomsWithCityAndCriteria(location, criterion);
+            }else if (!location.equals("")){
+            //retornar totes les habitacions
+                llistaHabitacions = super.findRoomsWithCriteria(criterion);
+                
+            }
+            GenericEntity<List<Habitacio>> llista = new GenericEntity<List<Habitacio>>(llistaHabitacions){};
+            return Response.ok().entity(llista).build();
+        }catch(NullPointerException e){
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
-        GenericEntity<List<Habitacio>> llista = new GenericEntity<List<Habitacio>>(llistaHabitacions){};
-        return Response.ok().entity(llista).build();
+        
     }
-
+    
+    private List<Habitacio> totesHabitacions(){
+        return super.findAll();
+    }
 
     @Override
     protected EntityManager getEntityManager() {
