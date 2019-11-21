@@ -88,18 +88,19 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
     @GET
     @Produces({"application/json"})
     //http://localhost:8080/Pract1_SistemesOberts/webresources/room?location=Valls&sort=asc
-    //http://localhost:8080/Pract1_SistemesOberts/webresources/room?location&sort=asc   ---> aquest no funcionaaa
-    public Response find(@QueryParam("location") String location, @QueryParam("sort") String criterion) {
+    //http://localhost:8080/Pract1_SistemesOberts/webresources/room?location&sort=asc   
+    public Response find(@QueryParam("location") String location,@QueryParam("sort") String criterion) {
         List<Habitacio> llistaHabitacions = new ArrayList<Habitacio>();
-        if(criterion.equals("")){
+        if(criterion==null){
             return Response.status(Response.Status.BAD_REQUEST).entity("Falta criteri.").build();
         }
         
         try{
-            if (!location.equals("")&& !criterion.equals("")){
+            if (location!=null && criterion!=null){
             //retornar les habitacions que siguin duna ciutat i el criteri de ordenacio
                 llistaHabitacions = super.findRoomsWithCityAndCriteria(location, criterion);
-            }else if (!location.equals("")){
+            
+            }else if (criterion!=null){
             //retornar totes les habitacions
                 llistaHabitacions = super.findRoomsWithCriteria(criterion);
                 
@@ -107,10 +108,15 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
             GenericEntity<List<Habitacio>> llista = new GenericEntity<List<Habitacio>>(llistaHabitacions){};
             return Response.ok().entity(llista).build();
         }catch(NullPointerException e){
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Response.Status.NOT_FOUND).entity("null "+criterion+" "+location).build();
         }
         
     }
+    
+    
+    
+    
+    
     
     private List<Habitacio> totesHabitacions(){
         return super.findAll();
