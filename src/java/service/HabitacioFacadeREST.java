@@ -40,17 +40,29 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
     }
 
     @POST
-    @Override
-    @Consumes({"application/json"})
-    public void create(Habitacio entity) {
-        super.create(entity);
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response createHabitacio(Habitacio entity) {
+        if(entity == null)
+            return Response.status(Response.Status.PRECONDITION_FAILED).entity("No ve un JSON informat").build();
+        else{
+            super.create(entity);
+            System.out.println(entity.toString());
+            return Response.ok().entity("Nova entrada"+entity.toString()+"\nAfegida correctament.").build();
+        }
+       
     }
 
     @PUT
-    @Override
-    @Consumes({"application/json"})
-    public void edit(Habitacio entity) {
-        super.edit(entity);
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response editHabitacio(Habitacio entity) {
+        if(entity == null)
+            return Response.status(Response.Status.PRECONDITION_FAILED).entity("No ve un JSON informat").build();
+        else{
+            super.edit(entity);
+            System.out.println(entity);
+            return Response.ok().entity(entity+"\nha estat modificada correctament.").build();
+        }
+        
     }
 
     @DELETE
@@ -61,7 +73,7 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
         Habitacio hab = super.find(Long.valueOf(id));
         if(hab!= null){
             super.remove(hab);
-            return Response.ok().entity("Habitacio "+id+" esborrada.").build();
+            return Response.ok().entity("Habitacio \n"+hab+"\n esborrada correctament.").build();
         }
         
         return Response.status(Response.Status.BAD_REQUEST).entity("Id no disponible").build();
@@ -71,16 +83,16 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
     
     @GET
     @Path("{id}")
-    @Produces({"application/json"})
+    @Produces({MediaType.APPLICATION_JSON})
     //http://localhost:8080/Pract1_SistemesOberts/webresources/room/id
     public Response find(@PathParam("id") Integer id) {
         if(id == null)
-            return Response.status(Response.Status.FORBIDDEN).build();
+            return Response.status(Response.Status.BAD_REQUEST).build();
         Habitacio hab = super.find(Long.valueOf(id));
         if(hab != null){
             return Response.ok(hab, MediaType.APPLICATION_JSON).build();
         }else {
-            return Response.status(404).build();
+            return Response.status(Response.Status.NOT_FOUND).entity("ID:"+id+" no disponible.").build();
         }
         
     }
@@ -112,10 +124,6 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
         }
         
     }
-    
-    
-    
-    
     
     
     private List<Habitacio> totesHabitacions(){

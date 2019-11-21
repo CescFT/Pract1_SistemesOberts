@@ -105,6 +105,11 @@ public class Requeriment implements Serializable{
         this.mascotes = mascotes;
     }
 
+    @Override
+    public String toString() {
+        return "Requeriment{" + "home=" + home + ", dona=" + dona + ", unisex=" + unisex + ", rangEdatMin=" + rangEdatMin + ", rangEdatMax=" + rangEdatMax + ", fumador=" + fumador + ", mascotes=" + mascotes + '}';
+    }
+
     
 
     

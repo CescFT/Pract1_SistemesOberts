@@ -31,11 +31,11 @@ public class Habitacio implements Serializable{
     private static final long serialVersionUID = 1L;
     @Id @NotNull @Column(name="HABITACIO_ID") @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Habitacio_Gen")
     private Long idHabitacio;
-    @Size(max=200) @Column(name="DESCRIPCIO")
+    @Size(max=500) @Column(name="DESCRIPCIO")
     private String descripcio; 
-    @Column(name="ADREÇA") @Size(max=100)
+    @Column(name="ADREÇA") @Size(max=500)
     private String adresa;
-    @Column(name="CIUTAT") @Size(max=10)
+    @Column(name="CIUTAT") @Size(max=500)
     private String ciutat;
     
     @Column(name="SIMPLE")

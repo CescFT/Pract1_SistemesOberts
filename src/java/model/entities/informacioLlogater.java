@@ -15,9 +15,9 @@ import javax.validation.constraints.Size;
  */
 @Embeddable
 public class informacioLlogater implements Serializable{
-    @Column(name="NOM_LLOGATER") @Size(max=30)
+    @Column(name="NOM_LLOGATER") @Size(max=500)
     private String nom;
-    @Column(name="COGNOM_LLOGATER") @Size(max=30)
+    @Column(name="COGNOM_LLOGATER") @Size(max=500)
     private String cognom;
     
     private boolean home;
@@ -55,6 +55,11 @@ public class informacioLlogater implements Serializable{
 
     public void setDona(boolean dona) {
         this.dona = dona;
+    }
+
+    @Override
+    public String toString() {
+        return "informacioLlogater{" + "nom=" + nom + ", cognom=" + cognom + ", home=" + home + ", dona=" + dona + '}';
     }
 
     
