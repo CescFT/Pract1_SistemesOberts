@@ -6,8 +6,6 @@
 package model.entities;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.*;
-import javax.ws.rs.Path;
 import javax.xml.bind.annotation.XmlRootElement;
 /**
  *
@@ -15,7 +13,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @XmlRootElement
-@Path("/tenant")
 @NamedQueries({
     @NamedQuery(name="tenant.findAll", query="SELECT r FROM Llogater r"),
     @NamedQuery(name="tenant.information", query="SELECT r FROM Llogater r WHERE r.id = :id"),
@@ -47,9 +44,6 @@ public class Llogater implements Serializable{
         this.info = info;
     }
 
-    
-
-    
     @Override
     public boolean equals(Object object) {
         if (!(object instanceof Llogater)) {
@@ -74,11 +68,5 @@ public class Llogater implements Serializable{
         return "Llogater{" + "id=" + id + ", info=" + info + '}';
     }
 
-    
-    
-    
-    
-    
-    
-    
+     
 }

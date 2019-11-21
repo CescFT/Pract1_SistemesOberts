@@ -18,6 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import model.entities.Llogater;
 
@@ -26,7 +27,7 @@ import model.entities.Llogater;
  * @author Cesc
  */
 @Stateless
-@Path("/tenant")
+@Path("tenant")
 public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     @PersistenceContext(unitName = "Homework1PU") //Aixo fa que sigui un container, i no haver de fer us del commit i transaction i tot aixo
                                                  //Lo de lab10_wspu esta dins del fitxer persistence.xml a <persistence-unit>
@@ -36,6 +37,12 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
         super(Llogater.class);
     }
 
+    
+    @GET
+    @Path("{j}")
+    public Response hola(){
+        return Response.ok().entity("puta espanyaaa").build();
+    }
     @POST
     @Override
     @Consumes({"application/json"})
@@ -75,13 +82,20 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     }
     
     @GET
-    @Produces({"application/json"})
+    @Produces({MediaType.APPLICATION_JSON})
     public Response listOfTenants(){
+        try{
         List<Llogater> llogaters = super.findAllTenants();
-        if (llogaters.size() == 0)
-            return Response.status(Response.Status.NO_CONTENT).build();
-        GenericEntity<List<Llogater>> llista = new GenericEntity<List<Llogater>>(llogaters){};
-        return Response.ok().entity(llista).build();
+        
+        if (llogaters.isEmpty())
+            return Response.status(Response.Status.NO_CONTENT).entity("No hi ha llogaters.").build();
+        else{
+            GenericEntity<List<Llogater>> llista = new GenericEntity<List<Llogater>>(llogaters){};
+            return Response.ok().entity(llista).build();
+        }
+        }catch(NullPointerException e){
+            return Response.status(Response.Status.NOT_FOUND).entity("ouuuuh fuck").build();
+        }
     }
 
     @Override
