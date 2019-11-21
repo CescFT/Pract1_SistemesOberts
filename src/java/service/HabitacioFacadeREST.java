@@ -53,6 +53,7 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
     }
 
     @PUT
+    @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response editHabitacio(Habitacio entity) {
         if(entity == null)
