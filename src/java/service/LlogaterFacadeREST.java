@@ -102,10 +102,15 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     }
 
     @PUT
-    @Override
+    @Path("{id}")
     @Consumes({"application/json"})
-    public void edit(Llogater entity) {     //OK
-        super.edit(entity);
+    public Response editLlogater(Llogater entity) {     //OK
+        if(entity == null)
+            return Response.status(Response.Status.BAD_REQUEST).entity("No hi ha JSON informat o és invàlid").build();
+        else{
+            super.edit(entity);
+            return Response.status(Response.Status.GONE).entity("Llogater "+entity+"\n\n modificat correctament.").build();
+        }
     }
 
     @DELETE
