@@ -47,7 +47,7 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
         else{
             super.create(entity);
             System.out.println(entity.toString());
-            return Response.ok().entity("Nova entrada"+entity.toString()+"\nAfegida correctament.").build();
+            return Response.status(Response.Status.CREATED).entity("Nova entrada\n"+entity.toString()+"\nAfegida correctament.").build();
         }
        
     }
@@ -93,7 +93,7 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
         if(hab != null){
             return Response.ok(hab, MediaType.APPLICATION_JSON).build();
         }else {
-            return Response.status(Response.Status.NOT_FOUND).entity("ID:"+id+" no disponible.").build();
+            return Response.status(Response.Status.NOT_FOUND).entity("ID: "+id+" no disponible.").build();
         }
         
     }

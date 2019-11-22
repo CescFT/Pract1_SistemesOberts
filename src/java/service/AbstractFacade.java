@@ -11,6 +11,7 @@ import model.entities.Habitacio;
 import model.entities.Llogater;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ConstraintViolation;
+import java.util.*;
 /**
  *
  * @author Administrador
@@ -47,6 +48,8 @@ public abstract class AbstractFacade<T> {
     public void remove(T entity) {
         getEntityManager().remove(getEntityManager().merge(entity));
     }
+    
+    
 
     public T find(Object id) {
         return getEntityManager().find(entityClass, id);
@@ -61,6 +64,18 @@ public abstract class AbstractFacade<T> {
     public List<Habitacio> findAllRooms(){
         TypedQuery<Habitacio> query = (TypedQuery<Habitacio>)getEntityManager().createNamedQuery("room.allRooms");
         return query.getResultList();
+    }
+    
+    public boolean isTenant(List<Habitacio> llistaHabitacions, Llogater ll){
+        if(llistaHabitacions.isEmpty())
+            return false;
+        int i =0;
+        while(i<llistaHabitacions.size()){
+            if(llistaHabitacions.get(i).getLlogater().getId().equals(ll.getId()))
+                return true;
+            i++;
+        }
+        return false;
     }
     
     public List<Habitacio> findRoomsWithCriteria(String criteria){

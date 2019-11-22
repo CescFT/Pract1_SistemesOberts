@@ -38,41 +38,49 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     }
 
     
-    @GET
-    @Path("{j}")
-    public Response hola(){
-        return Response.ok().entity("puta espanyaaa").build();
-    }
+    
     @POST
-    @Override
     @Consumes({"application/json"})
-    public void create(Llogater entity) {
-        super.create(entity);
+    public Response createLlogater(Llogater entity) {       //OK
+        if(entity == null)
+            return Response.status(Response.Status.BAD_REQUEST).entity("No es pot generar perquè no hi ha un JSON vàlid o informat").build();
+        else{
+            super.create(entity);
+            return Response.status(Response.Status.CREATED).entity("Llogater:\n "+entity+"\ncreat amb èxit.").build();
+        }
+        
     }
 
     @PUT
     @Override
     @Consumes({"application/json"})
-    public void edit(Llogater entity) {
+    public void edit(Llogater entity) {     //OK
         super.edit(entity);
     }
 
     @DELETE
     @Path("{id}")
-    public Response remove(@PathParam("id") Integer id) {
+    public Response remove(@PathParam("id") Integer id) {       //OK
         
         Llogater tenant = super.find(Long.valueOf(id));
         if (tenant != null){
-            super.remove(tenant);
-            return Response.ok().entity("Llogater "+id+" eliminat").build();
+            if(super.isTenant(super.findAllRooms(), tenant))
+                return Response.status(Response.Status.FOUND).entity("No es pot esborrar perque té una habitacio.").build();
+            else{
+                super.remove(tenant);
+                return Response.ok().entity("Llogater "+tenant+"\n eliminat").build();
+            }
+            
         }
         return Response.status(Response.Status.BAD_REQUEST).entity(id+" no disponible").build();
+           
+        
     }
 
     @GET
     @Path("{id}")
     @Produces({"application/json"})
-    public Response find(@PathParam("id") Integer id) {
+    public Response find(@PathParam("id") Integer id) { //OK
         
         Llogater tenant = super.find(Long.valueOf(id));
         if (tenant != null){
@@ -83,7 +91,7 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response listOfTenants(){
+    public Response listOfTenants(){    //OK
         try{
         List<Llogater> llogaters = super.findAllTenants();
         
