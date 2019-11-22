@@ -20,7 +20,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import model.entities.Habitacio;
 import model.entities.Llogater;
+import model.entities.Requeriment;
+import model.entities.informacioLlogater;
 
 /**
  *
@@ -37,6 +40,53 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
         super(Llogater.class);
     }
 
+    
+    @POST
+    @Path("{id}/rent")
+    @Consumes({"application/json"})
+    public Response rentingRoom(Habitacio hab, @PathParam("id") Integer id){
+        if(hab ==null)
+            return Response.status(Response.Status.NOT_FOUND).entity("Per a fer anar aquest mètode has de passar una habitacio en JSON!").build();
+        if(id == null)
+            return Response.status(Response.Status.BAD_REQUEST).entity("ID nul, no es pot fer renting").build();
+        Llogater llogater = super.find(Long.valueOf(id));
+        if(llogater == null)
+            return Response.status(Response.Status.NOT_FOUND).entity("El llogater amb id: "+id+" no es troba a la base de dades.").build();
+        else{
+              if(comprovarRequeriments(hab, llogater)){
+                  hab.setLlogater(llogater);
+                  getEntityManager().merge(hab);
+                  return Response.status(Response.Status.CREATED).entity(hab+"\n\nHa estat llogada per: "+llogater+"\n\nOperació finalitada.").build();
+              }else
+                  return Response.status(Response.Status.CONFLICT).entity("No compleix els requisits.").build();
+        }
+
+    }
+    
+    private boolean comprovarRequeriments(Habitacio h, Llogater ll){
+        informacioLlogater infoLlogater = ll.getInfo();
+        Requeriment reqHab = h.getRequeriment();
+        
+        boolean compleix = false;
+        if(infoLlogater.isTeMascotes() == reqHab.isMascotes()){
+            if(infoLlogater.isFumador() == reqHab.isFumador()){
+                if(infoLlogater.getEdat() >= reqHab.getRangEdatMin() && infoLlogater.getEdat()<=reqHab.getRangEdatMax())
+                    compleix=true;
+            }
+        }
+        
+        if(!compleix)
+            return false;
+        else{
+            if(reqHab.isUnisex())
+                return true;
+            else if(infoLlogater.isDona() == reqHab.isDona())
+                return true;
+            else if (infoLlogater.isHome() == reqHab.isHome())
+                return true;
+        }
+        return false;
+    }
     
     
     @POST

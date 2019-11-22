@@ -45,6 +45,7 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
         if(entity == null)
             return Response.status(Response.Status.PRECONDITION_FAILED).entity("No ve un JSON informat").build();
         else{
+            //mirar els camps q s'omplen buits i omplir-los jo!
             super.create(entity);
             System.out.println(entity.toString());
             return Response.status(Response.Status.CREATED).entity("Nova entrada\n"+entity.toString()+"\nAfegida correctament.").build();

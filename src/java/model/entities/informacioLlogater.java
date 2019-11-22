@@ -20,11 +20,44 @@ public class informacioLlogater implements Serializable{
     @Column(name="COGNOM_LLOGATER") @Size(max=500)
     private String cognom;
     
+    @Column(name="EDAT_LLOGATER")
+    private int edat;
+    
+    private boolean fumador;
+    
+    private boolean teMascotes;
+    
     private boolean home;
     
     private boolean dona;
+
+    public int getEdat() {
+        return edat;
+    }
+
+    public void setEdat(int edat) {
+        this.edat = edat;
+    }
+
+    public boolean isFumador() {
+        return fumador;
+    }
+
+    public void setFumador(boolean fumador) {
+        this.fumador = fumador;
+    }
+
+    public boolean isTeMascotes() {
+        return teMascotes;
+    }
+
+    public void setTeMascotes(boolean teMascotes) {
+        this.teMascotes = teMascotes;
+    }
     
 
+    
+    
     public String getNom() {
         return nom;
     }
@@ -59,8 +92,10 @@ public class informacioLlogater implements Serializable{
 
     @Override
     public String toString() {
-        return "informacioLlogater{" + "nom=" + nom + ", cognom=" + cognom + ", home=" + home + ", dona=" + dona + '}';
+        return "informacioLlogater{" + "nom=" + nom + ", cognom=" + cognom + ", edat=" + edat + ", fumador=" + fumador + ", teMascotes=" + teMascotes + ", home=" + home + ", dona=" + dona + '}';
     }
+
+    
 
     
     
