@@ -16,6 +16,7 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
@@ -48,13 +49,35 @@ public class autenticacioClientWeb extends AbstractFacade<credentialsClient>{
             //Autenticació de l'usuari fent servir les credencials donades
             if(authenticateClient(username, passwd)){
                 String token = getToken(username);
-                return Response.ok("YOUR TOKEN FOR DO IMPORTANT THINGS IS:\n\n"+token).build();
+                credentialsClient c = super.findClientAutoritizat(username);
+                if(c.getTokenAutoritzacio() == null){
+                    c.setTokenAutoritzacio(token);
+                    super.edit(c);
+                    return Response.ok("YOUR TOKEN FOR DO IMPORTANT THINGS IS:\n\n"+c.getTokenAutoritzacio()).build();
+                }else{
+                    return Response.ok().entity("Aquest usuari ja té un token. Es aquest:\n\n"+c.getTokenAutoritzacio()).build();
+                }
             }else
                 return Response.status(Response.Status.NOT_FOUND).entity("No ets un client autoritzat.").build();
         }catch(Exception e){
             return Response.status(Response.Status.FORBIDDEN).build();
         }
                
+    }
+    
+    @GET
+    @Path("{username}")
+    @Produces({"application/text"})
+    public Response getMevaContrassenya(@PathParam("username") String username){
+        if(username == null)
+            return Response.status(Response.Status.NOT_FOUND).build();
+        credentialsClient c = super.findClientAutoritizat(username);
+        if(c == null)
+            return Response.status(Response.Status.NOT_FOUND).build();
+        else{
+            return Response.ok().entity("La password per a "+c.getUsername()+" es: "+c.getPassword()).build();
+        }
+        
     }
     
     @GET
@@ -71,7 +94,7 @@ public class autenticacioClientWeb extends AbstractFacade<credentialsClient>{
     }
     
     @GET
-    @Path("{all}")
+    @Path("/all")
     @Produces({"application/json"})
     public Response getAllClientsAutoritzats(){
         List<credentialsClient> llista = new ArrayList<credentialsClient>();

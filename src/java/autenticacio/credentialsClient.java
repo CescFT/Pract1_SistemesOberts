@@ -32,6 +32,8 @@ public class credentialsClient implements Serializable{
     
     @Column(name="E_MAIL") @Size(max = 500)
     private String email;
+    
+    private String tokenAutoritzacio;
 
     public credentialsClient() {
     }
@@ -42,6 +44,16 @@ public class credentialsClient implements Serializable{
         this.email = email;
     }
 
+    public String getTokenAutoritzacio() {
+        return tokenAutoritzacio;
+    }
+
+    public void setTokenAutoritzacio(String tokenAutoritzacio) {
+       this.tokenAutoritzacio = tokenAutoritzacio;
+        
+    }
+
+    
     public String getEmail() {
         return email;
     }
