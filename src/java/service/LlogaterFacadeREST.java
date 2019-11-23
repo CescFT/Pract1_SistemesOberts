@@ -5,12 +5,15 @@
  */
 package service;
 
+import autenticacio.credentialsClient;
+import autenticacio.token;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -115,6 +118,7 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
 
     @DELETE
     @Path("{id}")
+    //@Consumes({MediaType.APPLICATION_FORM_URLENCODED})
     public Response remove(@PathParam("id") Integer id) {       //OK
         
         Llogater tenant = super.find(Long.valueOf(id));
@@ -145,20 +149,25 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     }
     
     @GET
+    @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response listOfTenants(){    //OK
-        try{
-        List<Llogater> llogaters = super.findAllTenants();
+    public Response listOfTenants(token token){    //OK
         
-        if (llogaters.isEmpty())
-            return Response.status(Response.Status.NO_CONTENT).entity("No hi ha llogaters.").build();
-        else{
-            GenericEntity<List<Llogater>> llista = new GenericEntity<List<Llogater>>(llogaters){};
-            return Response.ok().entity(llista).build();
+        if(tokenVerificat(token)){
+            try{
+                List<Llogater> llogaters = super.findAllTenants();
+
+                if (llogaters.isEmpty())
+                    return Response.status(Response.Status.NO_CONTENT).entity("No hi ha llogaters.").build();
+                else{
+                    GenericEntity<List<Llogater>> llista = new GenericEntity<List<Llogater>>(llogaters){};
+                    return Response.ok().entity(llista).build();
+                }
+            }catch(NullPointerException e){
+                return Response.status(Response.Status.NOT_FOUND).entity("ouuuuh fuck").build();
+            } 
         }
-        }catch(NullPointerException e){
-            return Response.status(Response.Status.NOT_FOUND).entity("ouuuuh fuck").build();
-        }
+        return Response.status(Response.Status.BAD_REQUEST).entity("El token no es reconeix o no es de un client autoritzat.").build();
     }
 
     @Override
@@ -166,5 +175,10 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
         return em;
     }
     
+    private boolean tokenVerificat(token token){
+        List<credentialsClient> llistatClientsAutenticats = super.findAllClientsAutoritzats();
+        
+        return false;
+    }
     
 }

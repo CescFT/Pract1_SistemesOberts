@@ -33,7 +33,8 @@ public class credentialsClient implements Serializable{
     @Column(name="E_MAIL") @Size(max = 500)
     private String email;
     
-    private String tokenAutoritzacio;
+    @Embedded
+    private token tokenAutoritzacio;
 
     public credentialsClient() {
     }
@@ -44,14 +45,15 @@ public class credentialsClient implements Serializable{
         this.email = email;
     }
 
-    public String getTokenAutoritzacio() {
+    public token getTokenAutoritzacio() {
         return tokenAutoritzacio;
     }
 
-    public void setTokenAutoritzacio(String tokenAutoritzacio) {
-       this.tokenAutoritzacio = tokenAutoritzacio;
-        
+    public void setTokenAutoritzacio(token tokenAutoritzacio) {
+        this.tokenAutoritzacio = tokenAutoritzacio;
     }
+
+    
 
     
     public String getEmail() {
@@ -88,6 +90,8 @@ public class credentialsClient implements Serializable{
     public String toString() {
         return "credentialsClient{" + "username=" + username + ", password=" + password + ", email=" + email + ", tokenAutoritzacio=" + tokenAutoritzacio + '}';
     }
+
+    
 
     
 

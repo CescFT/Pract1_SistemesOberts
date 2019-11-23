@@ -15,6 +15,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
+import autenticacio.token;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -56,7 +57,7 @@ public class autenticacioClientWeb extends AbstractFacade<credentialsClient>{
                 String token = getToken(username);
                 credentialsClient c = super.findClientAutoritizat(username);
                 if(c.getTokenAutoritzacio() == null){
-                    c.setTokenAutoritzacio(token);
+                    c.setTokenAutoritzacio(new token(token));
                     super.edit(c);
                     return Response.ok("YOUR TOKEN FOR DO IMPORTANT THINGS IS:\n\n"+c.getTokenAutoritzacio()).build();
                 }else{
