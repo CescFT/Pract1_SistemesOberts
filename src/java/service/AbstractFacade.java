@@ -4,6 +4,7 @@
  */
 package service;
 
+import autenticacio.credentialsClient;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -109,6 +110,18 @@ public abstract class AbstractFacade<T> {
         TypedQuery<Llogater> query = (TypedQuery<Llogater>) getEntityManager()
                 .createNamedQuery("tenant.findAll");
         return query.getResultList();
+    }
+    
+    public List<credentialsClient> findAllClientsAutoritzats(){
+        TypedQuery<credentialsClient> query = (TypedQuery<credentialsClient>)
+                getEntityManager().createNamedQuery("credentialsClient.findAll");
+        return query.getResultList();
+    }
+    
+    public credentialsClient findClientAutoritizat(String username){
+        TypedQuery<credentialsClient> query = (TypedQuery<credentialsClient>)
+                getEntityManager().createNamedQuery("credentialsClient.matchUsername").setParameter("username", username);
+        return query.getSingleResult();
     }
     
 }
