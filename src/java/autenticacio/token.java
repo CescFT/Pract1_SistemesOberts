@@ -7,11 +7,13 @@ package autenticacio;
 import javax.persistence.*;
 import java.io.Serializable;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 /**
  *
  * @author Cesc
  */
 @Embeddable
+@XmlRootElement
 public class token implements Serializable{
     @Column(name="TOKEN") @Size(max=500)
     private String tokenAutoritzacio;

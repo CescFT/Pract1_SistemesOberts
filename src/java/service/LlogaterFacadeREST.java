@@ -7,6 +7,7 @@ package service;
 
 import autenticacio.credentialsClient;
 import autenticacio.token;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -149,25 +150,25 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     }
     
     @GET
-    @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response listOfTenants(token token){    //OK
+    public Response listOfTenants(){    //OK
         
-        if(tokenVerificat(token)){
-            try{
-                List<Llogater> llogaters = super.findAllTenants();
-
-                if (llogaters.isEmpty())
-                    return Response.status(Response.Status.NO_CONTENT).entity("No hi ha llogaters.").build();
-                else{
-                    GenericEntity<List<Llogater>> llista = new GenericEntity<List<Llogater>>(llogaters){};
-                    return Response.ok().entity(llista).build();
-                }
-            }catch(NullPointerException e){
-                return Response.status(Response.Status.NOT_FOUND).entity("ouuuuh fuck").build();
-            } 
+        
+        try{
+        List<Llogater> llogaters = super.findAllTenants();
+        
+        if (llogaters.isEmpty())
+            return Response.status(Response.Status.NO_CONTENT).entity("No hi ha llogaters.").build();
+        else{
+            GenericEntity<List<Llogater>> llista = new GenericEntity<List<Llogater>>(llogaters){};
+            return Response.ok().entity(llista).build();
         }
-        return Response.status(Response.Status.BAD_REQUEST).entity("El token no es reconeix o no es de un client autoritzat.").build();
+        }catch(NullPointerException e){
+            return Response.status(Response.Status.NOT_FOUND).entity("ouuuuh fuck").build();
+        }
+        
+        
+        
     }
 
     @Override
@@ -175,10 +176,45 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
         return em;
     }
     
+    
+    private credentialsClient whoDoneThisPetition(token token){
+        credentialsClient c = new credentialsClient();
+        List<credentialsClient> llistaClients = super.findAllClientsAutoritzats();
+        for(credentialsClient cli : llistaClients){
+            if(cli.getTokenAutoritzacio().compararTokens(token)){
+                c = cli;
+                break;
+            }
+        }
+        return c;
+    }
+    
     private boolean tokenVerificat(token token){
-        List<credentialsClient> llistatClientsAutenticats = super.findAllClientsAutoritzats();
-        
-        return false;
+        try{
+            List<credentialsClient> llistatClientsAutenticats = super.findAllClientsAutoritzats();
+            if(llistatClientsAutenticats.isEmpty())
+                return false;
+               
+            boolean trobat = false;
+            for(credentialsClient cli : llistatClientsAutenticats){
+                if(cli.getTokenAutoritzacio().compararTokens(token))
+                {
+                    trobat = true;
+                    break;
+                }
+            }
+            
+            if(trobat){
+                if(!token.getTokenAutoritzacio().contains("-"))
+                    return false;
+   
+            }else
+                return false;
+            
+        }catch(NullPointerException e){
+            return false;
+        }
+        return true;
     }
     
 }
