@@ -14,6 +14,7 @@ import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -26,6 +27,10 @@ import javax.ws.rs.core.Response;
 /**
  *
  * @author Cesc
+ * 
+ * Per tal de autenticar, quan executem el install.jsp, ens hem de quedar amb la password i el username que ens dona,
+ * aixo es clau per a que ens retorni el token (únic per a cada sessió i persistent). Recordem que la contrassenya es xifra i es guarda a la bd, si la volem recuperar
+ * hi ha un metode que ens la recupera, però es imprescindible el token.
  */
 @Stateless
 @Path("/autenticacio")
@@ -66,18 +71,27 @@ public class autenticacioClientWeb extends AbstractFacade<credentialsClient>{
     }
     
     @GET
-    @Path("{username}")
+    @Path("{username}/{token}")
     @Produces({"application/text"})
-    public Response getMevaContrassenya(@PathParam("username") String username){
-        if(username == null)
-            return Response.status(Response.Status.NOT_FOUND).build();
-        credentialsClient c = super.findClientAutoritizat(username);
-        if(c == null)
-            return Response.status(Response.Status.NOT_FOUND).build();
-        else{
-            return Response.ok().entity("La password per a "+c.getUsername()+" es: "+c.getPassword()).build();
-        }
+    public Response getMevaContrassenya(@PathParam("username") String username, @PathParam("token") String token){
         
+        credentialsClient c = super.findClientAutoritizat(username);
+        if(token == null)
+            return Response.status(Response.Status.NO_CONTENT).entity("No hi ha token").build();
+        else{
+            String substring ="-";
+            if(!token.contains(substring))
+                return Response.status(Response.Status.BAD_REQUEST).entity("Token invàlid. No té una forma autoritzada.").build();
+            else{
+                if(username == null)
+                   return Response.status(Response.Status.NOT_FOUND).entity("Username no informat.").build();
+                if(c == null)
+                    return Response.status(Response.Status.NOT_FOUND).entity("No hi ha un usuari amb aquest username: "+username).build();
+                if(!c.getTokenAutoritzacio().equals(token))
+                    return Response.status(Response.Status.BAD_REQUEST).entity("El username "+username+" no té aquest token.").build();
+            }
+        }
+         return Response.ok().entity("La password per a "+c.getUsername()+" es: "+c.getPassword()).build();    
     }
     
     @GET
