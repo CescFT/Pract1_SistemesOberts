@@ -36,5 +36,8 @@ public class token implements Serializable{
         return "token{" + "tokenAutoritzacio=" + tokenAutoritzacio + '}';
     }
     
+    public boolean compararTokens(token tk){
+        return this.tokenAutoritzacio.equals(tk.getTokenAutoritzacio());
+    }
     
 }

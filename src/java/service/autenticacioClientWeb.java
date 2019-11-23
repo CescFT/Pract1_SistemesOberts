@@ -88,7 +88,10 @@ public class autenticacioClientWeb extends AbstractFacade<credentialsClient>{
                    return Response.status(Response.Status.NOT_FOUND).entity("Username no informat.").build();
                 if(c == null)
                     return Response.status(Response.Status.NOT_FOUND).entity("No hi ha un usuari amb aquest username: "+username).build();
-                if(!c.getTokenAutoritzacio().equals(token))
+                
+                token tk = new token();
+                tk.setTokenAutoritzacio(token);
+                if(!c.getTokenAutoritzacio().compararTokens(tk))
                     return Response.status(Response.Status.BAD_REQUEST).entity("El username "+username+" no té aquest token.").build();
             }
         }
