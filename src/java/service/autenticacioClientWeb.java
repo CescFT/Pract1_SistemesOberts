@@ -48,7 +48,7 @@ public class autenticacioClientWeb extends AbstractFacade<credentialsClient>{
             //Autenticació de l'usuari fent servir les credencials donades
             if(authenticateClient(username, passwd)){
                 String token = getToken(username);
-                return Response.ok(token).build();
+                return Response.ok("YOUR TOKEN FOR DO IMPORTANT THINGS IS:\n\n"+token).build();
             }else
                 return Response.status(Response.Status.NOT_FOUND).entity("No ets un client autoritzat.").build();
         }catch(Exception e){
