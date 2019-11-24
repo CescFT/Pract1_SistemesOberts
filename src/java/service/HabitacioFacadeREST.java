@@ -4,6 +4,7 @@
  */
 package service;
 
+import autenticacio.token;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -11,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -40,30 +42,44 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
     }
 
     @POST
-    @Consumes({MediaType.APPLICATION_JSON})
-    public Response createHabitacio(Habitacio entity) {
-        if(entity == null)
-            return Response.status(Response.Status.PRECONDITION_FAILED).entity("No ve un JSON informat").build();
-        else{
-            //mirar els camps q s'omplen buits i omplir-los jo!
-            super.create(entity);
-            System.out.println(entity.toString());
-            return Response.status(Response.Status.CREATED).entity("Nova entrada\n"+entity.toString()+"\nAfegida correctament.").build();
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    public Response createHabitacio(Habitacio entity, @FormParam("token") String token) {
+        token tk = new token();
+        tk.setTokenAutoritzacio(token);
+        if(super.tokenVerificat(tk)){
+                if(entity == null)
+                return Response.status(Response.Status.PRECONDITION_FAILED).entity("No ve un JSON informat").build();
+            else{
+                //mirar els camps q s'omplen buits i omplir-los jo!
+                super.create(entity);
+                System.out.println(entity.toString());
+                return Response.status(Response.Status.CREATED).entity("Nova entrada\n"+entity.toString()+"\nAfegida correctament.").build();
+            }
+        }else{
+            return Response.status(Response.Status.BAD_REQUEST).entity("token invàlid o no t'has autenticat").build();
         }
+        
        
     }
 
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    public Response editHabitacio(Habitacio entity) {
-        if(entity == null)
-            return Response.status(Response.Status.PRECONDITION_FAILED).entity("No ve un JSON informat").build();
-        else{
-            super.edit(entity);
-            System.out.println(entity);
-            return Response.ok().entity(entity+"\nha estat modificada correctament.").build();
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
+    public Response editHabitacio(Habitacio entity, @FormParam("token") String token) {
+        token tk = new token();
+        tk.setTokenAutoritzacio(token);
+        if(super.tokenVerificat(tk)){
+                if(entity == null)
+                return Response.status(Response.Status.PRECONDITION_FAILED).entity("No ve un JSON informat").build();
+            else{
+                super.edit(entity);
+                System.out.println(entity);
+                return Response.ok().entity(entity+"\nha estat modificada correctament.").build();
+            }
+        }else{
+            return Response.status(Response.Status.BAD_REQUEST).entity("token invàlid o no t'has autenticat").build();
         }
+        
         
     }
 

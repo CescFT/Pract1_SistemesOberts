@@ -47,23 +47,30 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     
     @POST
     @Path("{id}/rent")
-    @Consumes({"application/json"})
-    public Response rentingRoom(Habitacio hab, @PathParam("id") Integer id){
-        if(hab ==null)
+    @Consumes({"application/json", MediaType.APPLICATION_FORM_URLENCODED})
+    public Response rentingRoom(Habitacio hab, @PathParam("id") Integer id, @FormParam("token") String token){
+        token tk = new token();
+        tk.setTokenAutoritzacio(token);
+       if(super.tokenVerificat(tk)){
+           if(hab ==null)
             return Response.status(Response.Status.NOT_FOUND).entity("Per a fer anar aquest mètode has de passar una habitacio en JSON!").build();
-        if(id == null)
-            return Response.status(Response.Status.BAD_REQUEST).entity("ID nul, no es pot fer renting").build();
-        Llogater llogater = super.find(Long.valueOf(id));
-        if(llogater == null)
-            return Response.status(Response.Status.NOT_FOUND).entity("El llogater amb id: "+id+" no es troba a la base de dades.").build();
-        else{
-              if(comprovarRequeriments(hab, llogater)){
-                  hab.setLlogater(llogater);
-                  getEntityManager().merge(hab);
-                  return Response.status(Response.Status.CREATED).entity(hab+"\n\nHa estat llogada per: "+llogater+"\n\nOperació finalitada.").build();
-              }else
-                  return Response.status(Response.Status.CONFLICT).entity("No compleix els requisits.").build();
-        }
+            if(id == null)
+                return Response.status(Response.Status.BAD_REQUEST).entity("ID nul, no es pot fer renting").build();
+            Llogater llogater = super.find(Long.valueOf(id));
+            if(llogater == null)
+                return Response.status(Response.Status.NOT_FOUND).entity("El llogater amb id: "+id+" no es troba a la base de dades.").build();
+            else{
+                  if(comprovarRequeriments(hab, llogater)){
+                      hab.setLlogater(llogater);
+                      getEntityManager().merge(hab);
+                      return Response.status(Response.Status.CREATED).entity(hab+"\n\nHa estat llogada per: "+llogater+"\n\nOperació finalitada.").build();
+                  }else
+                      return Response.status(Response.Status.CONFLICT).entity("No compleix els requisits.").build();
+            }
+       }else{
+           return Response.status(Response.Status.BAD_REQUEST).entity("Token invàlid o no t'has autenticat").build();
+       }        
+        
 
     }
     
@@ -94,32 +101,45 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     
     
     @POST
-    @Consumes({"application/json"})
-    public Response createLlogater(Llogater entity) {       //OK
-        if(entity == null)
-            return Response.status(Response.Status.BAD_REQUEST).entity("No es pot generar perquè no hi ha un JSON vàlid o informat").build();
-        else{
-            super.create(entity);
-            return Response.status(Response.Status.CREATED).entity("Llogater:\n "+entity+"\ncreat amb èxit.").build();
+    @Consumes({"application/json", MediaType.APPLICATION_FORM_URLENCODED})
+    public Response createLlogater(Llogater entity, @FormParam("token") String token) {       //OK
+        token tk = new token();
+        tk.setTokenAutoritzacio(token);
+        if(super.tokenVerificat(tk)){
+                if(entity == null)
+                return Response.status(Response.Status.BAD_REQUEST).entity("No es pot generar perquè no hi ha un JSON vàlid o informat").build();
+            else{
+                super.create(entity);
+                return Response.status(Response.Status.CREATED).entity("Llogater:\n "+entity+"\ncreat amb èxit.").build();
+            }
+        }else{
+            return Response.status(Response.Status.BAD_REQUEST).entity("token invàlid o no has afegit un token").build();
         }
+        
         
     }
 
     @PUT
     @Path("{id}")
-    @Consumes({"application/json"})
-    public Response editLlogater(Llogater entity) {     //OK
-        if(entity == null)
-            return Response.status(Response.Status.BAD_REQUEST).entity("No hi ha JSON informat o és invàlid").build();
-        else{
-            super.edit(entity);
-            return Response.status(Response.Status.GONE).entity("Llogater "+entity+"\n\n modificat correctament.").build();
+    @Consumes({"application/json", MediaType.APPLICATION_FORM_URLENCODED})
+    public Response editLlogater(Llogater entity, @FormParam("token") String token) {     //OK
+        token tk = new token();
+        tk.setTokenAutoritzacio(token);
+        if(super.tokenVerificat(tk)){
+                if(entity == null)
+                return Response.status(Response.Status.BAD_REQUEST).entity("No hi ha JSON informat o és invàlid").build();
+            else{
+                super.edit(entity);
+                return Response.status(Response.Status.GONE).entity("Llogater "+entity+"\n\n modificat correctament.").build();
+            }
+        }else{
+            return Response.status(Response.Status.BAD_REQUEST).entity("el token es invàlid o no has afegit un token").build();
         }
+        
     }
 
     @DELETE
     @Path("{id}")
-    //@Consumes({MediaType.APPLICATION_FORM_URLENCODED})
     public Response remove(@PathParam("id") Integer id) {       //OK
         
         Llogater tenant = super.find(Long.valueOf(id));
@@ -177,44 +197,6 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     }
     
     
-    private credentialsClient whoDoneThisPetition(token token){
-        credentialsClient c = new credentialsClient();
-        List<credentialsClient> llistaClients = super.findAllClientsAutoritzats();
-        for(credentialsClient cli : llistaClients){
-            if(cli.getTokenAutoritzacio().compararTokens(token)){
-                c = cli;
-                break;
-            }
-        }
-        return c;
-    }
     
-    private boolean tokenVerificat(token token){
-        try{
-            List<credentialsClient> llistatClientsAutenticats = super.findAllClientsAutoritzats();
-            if(llistatClientsAutenticats.isEmpty())
-                return false;
-               
-            boolean trobat = false;
-            for(credentialsClient cli : llistatClientsAutenticats){
-                if(cli.getTokenAutoritzacio().compararTokens(token))
-                {
-                    trobat = true;
-                    break;
-                }
-            }
-            
-            if(trobat){
-                if(!token.getTokenAutoritzacio().contains("-"))
-                    return false;
-   
-            }else
-                return false;
-            
-        }catch(NullPointerException e){
-            return false;
-        }
-        return true;
-    }
     
 }

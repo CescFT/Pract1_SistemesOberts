@@ -5,6 +5,7 @@
 package service;
 
 import autenticacio.credentialsClient;
+import autenticacio.token;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -122,6 +123,49 @@ public abstract class AbstractFacade<T> {
         TypedQuery<credentialsClient> query = (TypedQuery<credentialsClient>)
                 getEntityManager().createNamedQuery("credentialsClient.matchUsername").setParameter("username", username);
         return query.getSingleResult();
+    }
+    
+    
+    public credentialsClient whoDoneThisPetition(token token){
+        credentialsClient c = new credentialsClient();
+        List<credentialsClient> llistaClients = findAllClientsAutoritzats();
+        for(credentialsClient cli : llistaClients){
+            if(cli.getTokenAutoritzacio().compararTokens(token)){
+                c = cli;
+                break;
+            }
+        }
+        return c;
+    }
+    
+    public boolean tokenVerificat(token token){
+        if(token == null)
+            return false;
+        try{
+            List<credentialsClient> llistatClientsAutenticats = findAllClientsAutoritzats();
+            if(llistatClientsAutenticats.isEmpty())
+                return false;
+               
+            boolean trobat = false;
+            for(credentialsClient cli : llistatClientsAutenticats){
+                if(cli.getTokenAutoritzacio().compararTokens(token))
+                {
+                    trobat = true;
+                    break;
+                }
+            }
+            
+            if(trobat){
+                if(!token.getTokenAutoritzacio().contains("-"))
+                    return false;
+   
+            }else
+                return false;
+            
+        }catch(NullPointerException e){
+            return false;
+        }
+        return true;
     }
     
 }
