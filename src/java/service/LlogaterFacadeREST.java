@@ -24,6 +24,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.json.*;
 import model.entities.Habitacio;
 import model.entities.Llogater;
 import model.entities.Requeriment;
@@ -42,6 +43,21 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
 
     public LlogaterFacadeREST() {
         super(Llogater.class);
+    }
+    
+    @POST
+    @Path("/processarTokenProva")
+    @Consumes({"application/json"})
+    public Response processamentProva(token json){
+        String jsonData = new JSONObject().put("tokenAutoritzacio", json.getTokenAutoritzacio()).toString();
+        System.out.println("::json que creo: "+jsonData);
+        System.out.println(":: token que em ve:"+json.getTokenAutoritzacio());
+        JSONObject jobj = new JSONObject(jsonData);
+        if(jobj.get("tokenAutoritzacio") instanceof JSONObject){
+            return Response.ok().entity(jobj.get("tokenAutoritzacio")).build();
+        }else{
+            return Response.ok().entity(json).build();
+        }
     }
 
     /*
