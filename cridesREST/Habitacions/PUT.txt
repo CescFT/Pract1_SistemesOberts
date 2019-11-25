@@ -1,0 +1,32 @@
+pillo 1 JSON, el modifico al meu gust i ale, PUT i go
+
+{
+    "adresa": "Carrer 1",
+    "ciutat": "Vilanova i la Geltrú",
+    "descripcio": "descripcio habitacio xx",
+    "doble" : 0,
+    "exterior": 0,
+    "interior": 0,
+    "moblada": 1,
+    "simple": 0,
+    "idHabitacio": 1,
+    "llogater": {
+        "id": 20550,
+        "info": {
+            "cognom": "Casanova",
+            "dona": 0,
+            "home": 1,
+            "nom": "Pere"
+        }
+    },
+    "preuMes": 500.1,
+    "requeriment": {
+        "dona": 0,
+        "fumador": 0,
+        "home": 0,
+        "mascotes": 0,
+        "rangEdatMax": 30,
+        "rangEdatMin": 50,
+        "unisex": 1
+    }
+}

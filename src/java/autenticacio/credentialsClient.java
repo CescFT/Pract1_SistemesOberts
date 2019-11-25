@@ -11,6 +11,7 @@ import java.util.Base64;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
  * @author Cesc

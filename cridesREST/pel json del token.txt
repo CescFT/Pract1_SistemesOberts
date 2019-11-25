@@ -1,0 +1,4 @@
+{
+	"tokenAutoritzacio" : "cesc-HEHPSyAkfKRHqj6e5sMJCmaRkorxAcoY" 
+	
+}
