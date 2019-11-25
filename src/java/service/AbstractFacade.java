@@ -139,6 +139,7 @@ public abstract class AbstractFacade<T> {
     }
     
     public boolean tokenVerificat(token token){
+        System.out.println("::token a verificar:"+token);
         if(token == null)
             return false;
         try{
@@ -148,11 +149,18 @@ public abstract class AbstractFacade<T> {
                
             boolean trobat = false;
             for(credentialsClient cli : llistatClientsAutenticats){
-                if(cli.getTokenAutoritzacio().compararTokens(token))
-                {
-                    trobat = true;
-                    break;
+                System.out.println("::client: "+cli);
+                
+                if(cli.getTokenAutoritzacio()!=null){
+                    
+                    if(cli.getTokenAutoritzacio().compararTokens(token))
+                    {
+                        System.out.println(":: token: "+cli.getTokenAutoritzacio());
+                        trobat = true;
+                        break;
+                    }
                 }
+                
             }
             
             if(trobat){

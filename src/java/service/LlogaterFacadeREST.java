@@ -40,24 +40,67 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     @PersistenceContext(unitName = "Homework1PU") //Aixo fa que sigui un container, i no haver de fer us del commit i transaction i tot aixo
                                                  //Lo de lab10_wspu esta dins del fitxer persistence.xml a <persistence-unit>
     private EntityManager em;
+    private token token;
+    private credentialsClient client;
 
     public LlogaterFacadeREST() {
         super(Llogater.class);
+        
+    }
+    
+    public void setClient(credentialsClient client){
+        this.client = client;
+    }
+    
+    public credentialsClient getClient(){
+        return this.client;
+    }
+    
+    private token getToken(){
+        return this.token;
+    }
+    
+    private void setToken(token token){
+        this.token = token;
     }
     
     @POST
-    @Path("/processarTokenProva")
+    @Path("/processarToken")
     @Consumes({"application/json"})
+    @Produces({"application/json"})
     public Response processamentProva(token json){
-        String jsonData = new JSONObject().put("tokenAutoritzacio", json.getTokenAutoritzacio()).toString();
-        System.out.println("::json que creo: "+jsonData);
-        System.out.println(":: token que em ve:"+json.getTokenAutoritzacio());
-        JSONObject jobj = new JSONObject(jsonData);
-        if(jobj.get("tokenAutoritzacio") instanceof JSONObject){
-            return Response.ok().entity(jobj.get("tokenAutoritzacio")).build();
-        }else{
-            return Response.ok().entity(json).build();
+        
+        System.out.println("::dada entrada"+json);
+        try{
+                if(super.tokenVerificat(json)){
+                this.setToken(json);
+                this.setClient(super.whoDoneThisPetition(this.getToken()));
+                return Response.ok().entity("Token emmagatzemat correctament:\n\n"+this.getToken()+"\nUsuari:"+this.getClient().getUsername()).build();
+            }else{
+                return Response.status(Response.Status.BAD_REQUEST).entity("El token no es correcte").build();
+            }
+        }catch(Exception e){
+            return Response.status(Response.Status.BAD_REQUEST).entity("Hi ha hagut algun error al processar el token.").build();
         }
+        
+        
+        /*
+        try{
+            String jsonData = new JSONObject().put("tokenAutoritzacio", json.getTokenAutoritzacio()).toString();
+            System.out.println("::json que creo: "+jsonData);
+            System.out.println(":: token que em ve:"+json.getTokenAutoritzacio());
+            JSONObject jobj = new JSONObject(jsonData);
+            if(jobj.get("tokenAutoritzacio") instanceof JSONObject){
+                String token = jobj.get("tokenAutoritzacio").toString();
+                System.out.println(token);
+                this.setToken(json);
+            }
+        }catch(Exception e){
+            
+        }
+        
+        return Response.ok().entity("token processat, ara ja pots entrar a qualsevol espai del llogater."+"\n\n"+json+"\n\n"+this.getToken()).build();*/
+        
     }
 
     /*
