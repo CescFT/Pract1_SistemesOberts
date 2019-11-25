@@ -44,7 +44,7 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
         super(Llogater.class);
     }
 
-    
+    /*
     @POST
     @Path("{id}/rent")
     @Consumes({"application/json", MediaType.APPLICATION_FORM_URLENCODED})
@@ -70,9 +70,36 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
        }else{
            return Response.status(Response.Status.BAD_REQUEST).entity("Token invàlid o no t'has autenticat").build();
        }        
-        
+    }*/
+    
+    
+    /*
+    
+    -----------PROVA SENSE TOKEN-----------
+    
+    */
+    @POST
+    @Path("{id}/rent")
+    @Consumes({"application/json"})
+    public Response rentingRoom(Habitacio hab, @PathParam("id") Integer id){
+        if(hab ==null)
+            return Response.status(Response.Status.NOT_FOUND).entity("Per a fer anar aquest mètode has de passar una habitacio en JSON!").build();
+        if(id == null)
+            return Response.status(Response.Status.BAD_REQUEST).entity("ID nul, no es pot fer renting").build();
+        Llogater llogater = super.find(Long.valueOf(id));
+        if(llogater == null)
+            return Response.status(Response.Status.NOT_FOUND).entity("El llogater amb id: "+id+" no es troba a la base de dades.").build();
+        else{
+              if(comprovarRequeriments(hab, llogater)){
+                  hab.setLlogater(llogater);
+                  getEntityManager().merge(hab);
+                  return Response.status(Response.Status.CREATED).entity(hab+"\n\nHa estat llogada per: "+llogater+"\n\nOperació finalitada.").build();
+              }else
+                  return Response.status(Response.Status.CONFLICT).entity("No compleix els requisits.").build();
+        }
 
     }
+    
     
     private boolean comprovarRequeriments(Habitacio h, Llogater ll){
         informacioLlogater infoLlogater = ll.getInfo();
@@ -99,7 +126,7 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
         return false;
     }
     
-    
+    /*
     @POST
     @Consumes({"application/json", MediaType.APPLICATION_FORM_URLENCODED})
     public Response createLlogater(Llogater entity, @FormParam("token") String token) {       //OK
@@ -117,7 +144,24 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
         }
         
         
+    }*/
+    
+    /*
+    
+    ----------PROVA SENSE TOKEN--------
+    */
+    @POST
+    @Consumes({"application/json"})
+    public Response createLlogater(Llogater entity) {       //OK
+        if(entity == null)
+            return Response.status(Response.Status.BAD_REQUEST).entity("No es pot generar perquè no hi ha un JSON vàlid o informat").build();
+        else{
+            super.create(entity);
+            return Response.status(Response.Status.CREATED).entity("Llogater:\n "+entity+"\ncreat amb èxit.").build();
+        }
+        
     }
+    
 
     @PUT
     @Path("{id}")
