@@ -84,23 +84,6 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
         }
         
         
-        /*
-        try{
-            String jsonData = new JSONObject().put("tokenAutoritzacio", json.getTokenAutoritzacio()).toString();
-            System.out.println("::json que creo: "+jsonData);
-            System.out.println(":: token que em ve:"+json.getTokenAutoritzacio());
-            JSONObject jobj = new JSONObject(jsonData);
-            if(jobj.get("tokenAutoritzacio") instanceof JSONObject){
-                String token = jobj.get("tokenAutoritzacio").toString();
-                System.out.println(token);
-                this.setToken(json);
-            }
-        }catch(Exception e){
-            
-        }
-        
-        return Response.ok().entity("token processat, ara ja pots entrar a qualsevol espai del llogater."+"\n\n"+json+"\n\n"+this.getToken()).build();*/
-        
     }
 
     /*
