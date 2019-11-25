@@ -57,9 +57,9 @@ public abstract class AbstractFacade<T> {
         return getEntityManager().find(entityClass, id);
     }
     
-    public Habitacio findWithId(int id){
+    public Habitacio findWithId(Long id){
         
-        TypedQuery<Habitacio> query =(TypedQuery<Habitacio>) getEntityManager().createNamedQuery("room.information");
+        TypedQuery<Habitacio> query =(TypedQuery<Habitacio>) getEntityManager().createNamedQuery("room.information").setParameter("id", id);
         return query.getSingleResult();
     }
 
@@ -68,16 +68,37 @@ public abstract class AbstractFacade<T> {
         return query.getResultList();
     }
     
-    public boolean isTenant(List<Habitacio> llistaHabitacions, Llogater ll){
-        if(llistaHabitacions.isEmpty())
-            return false;
-        int i =0;
-        while(i<llistaHabitacions.size()){
-            if(llistaHabitacions.get(i).getLlogater().getId().equals(ll.getId()))
-                return true;
-            i++;
+    public Habitacio returnHabitacioClient(Llogater ll){
+        try{
+            Habitacio hab = new Habitacio();
+            List<Habitacio> llistaHabitacions = findAllRooms();
+            for(Habitacio h : llistaHabitacions){
+                if(h.getLlogater().equals(ll)){
+                    hab = h;
+                    break;
+                }
+            }
+            return hab;
+        }catch(NullPointerException e){
+            return null;
         }
+    }
+    
+    public boolean isTenant(List<Habitacio> llistaHabitacions, Llogater ll){
+        try{
+            if(llistaHabitacions.isEmpty())
+            return false;
+        
+        for(Habitacio h : llistaHabitacions){
+            if(h.getLlogater().getId().equals(ll.getId()))
+                return true;
+        }
+       
         return false;
+        }catch(NullPointerException e){
+            return false;
+        }
+        
     }
     
     public List<Habitacio> findRoomsWithCriteria(String criteria){

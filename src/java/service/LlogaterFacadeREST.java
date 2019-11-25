@@ -133,9 +133,11 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
             return Response.status(Response.Status.NOT_FOUND).entity("El llogater amb id: "+id+" no es troba a la base de dades.").build();
         else{
               if(comprovarRequeriments(hab, llogater)){
-                  hab.setLlogater(llogater);
-                  getEntityManager().merge(hab);
-                  return Response.status(Response.Status.CREATED).entity(hab+"\n\nHa estat llogada per: "+llogater+"\n\nOperació finalitada.").build();
+                  Habitacio hab1 = super.findWithId(hab.getIdHabitacio());
+                  hab1.setLlogater(llogater);
+
+                  getEntityManager().merge(hab1);
+                  return Response.status(Response.Status.CREATED).entity(hab1+"\n\nHa estat llogada per: "+llogater+"\n\nOperació finalitada.").build();
               }else
                   return Response.status(Response.Status.CONFLICT).entity("No compleix els requisits.").build();
         }
@@ -222,6 +224,24 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
             return Response.status(Response.Status.BAD_REQUEST).entity("el token es invàlid o no has afegit un token").build();
         }
         
+    }
+    
+    @DELETE
+    @Path("alliberarHabitacio/{id}")
+    public Response alliberarHabitacio(@PathParam("id") Integer id){
+        Llogater tenant = super.find(Long.valueOf(id));
+        
+        if (tenant != null){
+            if(super.isTenant(super.findAllRooms(), tenant)){
+                Habitacio hab = super.returnHabitacioClient(tenant);
+                hab.setLlogater(null);
+                getEntityManager().merge(hab);
+                super.remove(tenant);
+                return Response.status(Response.Status.FOUND).entity("Llogater "+tenant+"\n\n eliminat correctament.").build();
+            }
+        }
+        return Response.status(Response.Status.BAD_REQUEST).entity(id+" no disponible").build();
+
     }
 
     @DELETE
