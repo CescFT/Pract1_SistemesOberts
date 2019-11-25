@@ -124,23 +124,28 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     @Path("{id}/rent")
     @Consumes({"application/json"})
     public Response rentingRoom(Habitacio hab, @PathParam("id") Integer id){
-        if(hab ==null)
-            return Response.status(Response.Status.NOT_FOUND).entity("Per a fer anar aquest mètode has de passar una habitacio en JSON!").build();
-        if(id == null)
-            return Response.status(Response.Status.BAD_REQUEST).entity("ID nul, no es pot fer renting").build();
-        Llogater llogater = super.find(Long.valueOf(id));
-        if(llogater == null)
-            return Response.status(Response.Status.NOT_FOUND).entity("El llogater amb id: "+id+" no es troba a la base de dades.").build();
-        else{
-              if(comprovarRequeriments(hab, llogater)){
-                  Habitacio hab1 = super.findWithId(hab.getIdHabitacio());
-                  hab1.setLlogater(llogater);
+        
+        if(token != null){
+                if(hab ==null)
+                return Response.status(Response.Status.NOT_FOUND).entity("Per a fer anar aquest mètode has de passar una habitacio en JSON!").build();
+            if(id == null)
+                return Response.status(Response.Status.BAD_REQUEST).entity("ID nul, no es pot fer renting").build();
+            Llogater llogater = super.find(Long.valueOf(id));
+            if(llogater == null)
+                return Response.status(Response.Status.NOT_FOUND).entity("El llogater amb id: "+id+" no es troba a la base de dades.").build();
+            else{
+                  if(comprovarRequeriments(hab, llogater)){
+                      Habitacio hab1 = super.findWithId(hab.getIdHabitacio());
+                      hab1.setLlogater(llogater);
 
-                  getEntityManager().merge(hab1);
-                  return Response.status(Response.Status.CREATED).entity(hab1+"\n\nHa estat llogada per: "+llogater+"\n\nOperació finalitada.").build();
-              }else
-                  return Response.status(Response.Status.CONFLICT).entity("No compleix els requisits.").build();
-        }
+                      getEntityManager().merge(hab1);
+                      return Response.status(Response.Status.CREATED).entity(hab1+"\n\nHa estat llogada per: "+llogater+"\n\nOperació finalitada.").build();
+                  }else
+                      return Response.status(Response.Status.CONFLICT).entity("No compleix els requisits.").build();
+            }
+
+        }else
+            return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
 
     }
     
@@ -197,50 +202,57 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     @POST
     @Consumes({"application/json"})
     public Response createLlogater(Llogater entity) {       //OK
-        if(entity == null)
-            return Response.status(Response.Status.BAD_REQUEST).entity("No es pot generar perquè no hi ha un JSON vàlid o informat").build();
-        else{
-            super.create(entity);
-            return Response.status(Response.Status.CREATED).entity("Llogater:\n "+entity+"\ncreat amb èxit.").build();
-        }
+        
+        if(token != null){
+                if(entity == null)
+                return Response.status(Response.Status.BAD_REQUEST).entity("No es pot generar perquè no hi ha un JSON vàlid o informat").build();
+            else{
+                super.create(entity);
+                return Response.status(Response.Status.CREATED).entity("Llogater:\n "+entity+"\ncreat amb èxit.").build();
+            }
+        }else
+            return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
         
     }
     
 
     @PUT
     @Path("{id}")
-    @Consumes({"application/json", MediaType.APPLICATION_FORM_URLENCODED})
-    public Response editLlogater(Llogater entity, @FormParam("token") String token) {     //OK
-        token tk = new token();
-        tk.setTokenAutoritzacio(token);
-        if(super.tokenVerificat(tk)){
-                if(entity == null)
+    @Consumes({"application/json"})
+    public Response editLlogater(Llogater entity) {     //OK
+        
+       if(token != null){
+           if(entity == null)
                 return Response.status(Response.Status.BAD_REQUEST).entity("No hi ha JSON informat o és invàlid").build();
             else{
                 super.edit(entity);
                 return Response.status(Response.Status.GONE).entity("Llogater "+entity+"\n\n modificat correctament.").build();
             }
-        }else{
-            return Response.status(Response.Status.BAD_REQUEST).entity("el token es invàlid o no has afegit un token").build();
-        }
-        
+       }else
+            return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
+
     }
     
     @DELETE
     @Path("alliberarHabitacio/{id}")
     public Response alliberarHabitacio(@PathParam("id") Integer id){
-        Llogater tenant = super.find(Long.valueOf(id));
         
-        if (tenant != null){
-            if(super.isTenant(super.findAllRooms(), tenant)){
-                Habitacio hab = super.returnHabitacioClient(tenant);
-                hab.setLlogater(null);
-                getEntityManager().merge(hab);
-                super.remove(tenant);
-                return Response.status(Response.Status.FOUND).entity("Llogater "+tenant+"\n\n eliminat correctament.").build();
+        if(token != null){
+            Llogater tenant = super.find(Long.valueOf(id));
+            if (tenant != null){
+                if(super.isTenant(super.findAllRooms(), tenant)){
+                    Habitacio hab = super.returnHabitacioClient(tenant);
+                    hab.setLlogater(null);
+                    getEntityManager().merge(hab);
+                    super.remove(tenant);
+                    return Response.status(Response.Status.FOUND).entity("Llogater "+tenant+"\n\n eliminat correctament.").build();
+                }
             }
-        }
-        return Response.status(Response.Status.BAD_REQUEST).entity(id+" no disponible").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(id+" no disponible").build();
+        }else
+            return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
+        
+   
 
     }
 
@@ -248,53 +260,57 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     @Path("{id}")
     public Response remove(@PathParam("id") Integer id) {       //OK
         
-        Llogater tenant = super.find(Long.valueOf(id));
-        if (tenant != null){
-            if(super.isTenant(super.findAllRooms(), tenant))
-                return Response.status(Response.Status.FOUND).entity("No es pot esborrar perque té una habitacio.").build();
-            else{
-                super.remove(tenant);
-                return Response.ok().entity("Llogater "+tenant+"\n eliminat").build();
+        if(token != null){
+            Llogater tenant = super.find(Long.valueOf(id));
+            if (tenant != null){
+                if(super.isTenant(super.findAllRooms(), tenant))
+                    return Response.status(Response.Status.FOUND).entity("No es pot esborrar perque té una habitacio.").build();
+                else{
+                    super.remove(tenant);
+                    return Response.ok().entity("Llogater "+tenant+"\n eliminat").build();
+                }
+
             }
-            
-        }
-        return Response.status(Response.Status.BAD_REQUEST).entity(id+" no disponible").build();
-           
-        
+            return Response.status(Response.Status.BAD_REQUEST).entity(id+" no disponible").build();
+        }else
+            return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
+
     }
 
     @GET
     @Path("{id}")
     @Produces({"application/json"})
     public Response find(@PathParam("id") Integer id) { //OK
-        
-        Llogater tenant = super.find(Long.valueOf(id));
-        if (tenant != null){
-            return Response.ok().entity(tenant).build();
-        }
-        return Response.status(Response.Status.BAD_REQUEST).entity("Id no correcte").build();
+        if(token != null){
+            Llogater tenant = super.find(Long.valueOf(id));
+            if (tenant != null){
+                return Response.ok().entity(tenant).build();
+            }
+            return Response.status(Response.Status.BAD_REQUEST).entity("Id no correcte").build();
+        }else
+            return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
     }
     
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response listOfTenants(){    //OK
         
-        
-        try{
-        List<Llogater> llogaters = super.findAllTenants();
-        
-        if (llogaters.isEmpty())
-            return Response.status(Response.Status.NO_CONTENT).entity("No hi ha llogaters.").build();
-        else{
-            GenericEntity<List<Llogater>> llista = new GenericEntity<List<Llogater>>(llogaters){};
-            return Response.ok().entity(llista).build();
-        }
-        }catch(NullPointerException e){
-            return Response.status(Response.Status.NOT_FOUND).entity("ouuuuh fuck").build();
-        }
-        
-        
-        
+        if(token != null){
+                try{
+            List<Llogater> llogaters = super.findAllTenants();
+
+            if (llogaters.isEmpty())
+                return Response.status(Response.Status.NO_CONTENT).entity("No hi ha llogaters.").build();
+            else{
+                GenericEntity<List<Llogater>> llista = new GenericEntity<List<Llogater>>(llogaters){};
+                return Response.ok().entity(llista).build();
+            }
+            }catch(NullPointerException e){
+                return Response.status(Response.Status.NOT_FOUND).entity("ouuuuh fuck").build();
+            }
+        }else
+            return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
+
     }
 
     @Override
