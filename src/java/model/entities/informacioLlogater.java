@@ -7,6 +7,8 @@ package model.entities;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 import javax.validation.constraints.Size;
 /**
@@ -27,9 +29,8 @@ public class informacioLlogater implements Serializable{
     
     private boolean teMascotes;
     
-    private boolean home;
-    
-    private boolean dona;
+    @Enumerated(EnumType.STRING)
+    private SexeLlogater sexe;
 
     public int getEdat() {
         return edat;
@@ -74,31 +75,18 @@ public class informacioLlogater implements Serializable{
         this.cognom = cognom;
     }
 
-    public boolean isHome() {
-        return home;
+    public SexeLlogater getSexe() {
+        return sexe;
     }
 
-    public void setHome(boolean home) {
-        this.home = home;
-    }
-
-    public boolean isDona() {
-        return dona;
-    }
-
-    public void setDona(boolean dona) {
-        this.dona = dona;
+    public void setSexe(SexeLlogater sexe) {
+        this.sexe = sexe;
     }
 
     @Override
     public String toString() {
-        return "informacioLlogater{" + "nom=" + nom + ", cognom=" + cognom + ", edat=" + edat + ", fumador=" + fumador + ", teMascotes=" + teMascotes + ", home=" + home + ", dona=" + dona + '}';
+        return "informacioLlogater{" + "nom=" + nom + ", cognom=" + cognom + ", edat=" + edat + ", fumador=" + fumador + ", teMascotes=" + teMascotes + ", sexe=" + sexe + '}';
     }
 
-    
-
-    
-    
-    
-    
+       
 }

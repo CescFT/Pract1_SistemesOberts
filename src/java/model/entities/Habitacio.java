@@ -38,16 +38,9 @@ public class Habitacio implements Serializable{
     @Column(name="CIUTAT") @Size(max=500)
     private String ciutat;
     
-    @Column(name="SIMPLE")
-    private Boolean simple;
-    @Column(name="DOBLE")
-    private Boolean doble;
-    @Column(name="EXTERIOR")
-    private Boolean exterior;
-    @Column(name="INTERIOR")
-    private Boolean interior;
-    @Column(name="MOBLADA")
-    private Boolean moblada;
+    @Enumerated(EnumType.STRING)
+    @Column(name="TIPUS")
+    private TipusHabitacio tipusHabitacio;
     
     @Column(name="PREU_MES")
     private float preuMes;
@@ -57,6 +50,14 @@ public class Habitacio implements Serializable{
 
     @OneToOne
     private Llogater llogater;
+
+    public TipusHabitacio getTipusHabitacio() {
+        return tipusHabitacio;
+    }
+
+    public void setTipusHabitacio(TipusHabitacio tipusHabitacio) {
+        this.tipusHabitacio = tipusHabitacio;
+    }
     
     
     
@@ -145,8 +146,10 @@ public class Habitacio implements Serializable{
 
     @Override
     public String toString() {
-        return "Habitacio{" + "idHabitacio=" + idHabitacio + ", descripcio=" + descripcio + ", adresa=" + adresa + ", ciutat=" + ciutat + ", simple=" + simple + ", doble=" + doble + ", exterior=" + exterior + ", interior=" + interior + ", moblada=" + moblada + ", preuMes=" + preuMes + ", requeriment=" + requeriment + ", llogater=" + llogater + '}';
+        return "Habitacio{" + "idHabitacio=" + idHabitacio + ", descripcio=" + descripcio + ", adresa=" + adresa + ", ciutat=" + ciutat + ", tipusHabitacio=" + tipusHabitacio + ", preuMes=" + preuMes + ", requeriment=" + requeriment + ", llogater=" + llogater + '}';
     }
+
+   
 
     
 

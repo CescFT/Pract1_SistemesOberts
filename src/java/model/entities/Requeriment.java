@@ -15,11 +15,8 @@ import java.io.Serializable;
 public class Requeriment implements Serializable{
     
     
-    private boolean home;
-    
-    private boolean dona;
-    
-    private boolean unisex;
+   @Enumerated(EnumType.STRING)
+   private SexeLlogater sexe;
     
     private int rangEdatMin;
     private int rangEdatMax;
@@ -32,29 +29,31 @@ public class Requeriment implements Serializable{
         
     }
 
-    public boolean isHome() {
-        return home;
+    public SexeLlogater getSexe() {
+        return sexe;
     }
 
-    public void setHome(boolean home) {
-        this.home = home;
+    public void setSexe(SexeLlogater sexe) {
+        this.sexe = sexe;
     }
 
-    public boolean isDona() {
-        return dona;
+    public Boolean getFumador() {
+        return fumador;
     }
 
-    public void setDona(boolean dona) {
-        this.dona = dona;
+    public void setFumador(Boolean fumador) {
+        this.fumador = fumador;
     }
 
-    public boolean isUnisex() {
-        return unisex;
+    public Boolean getMascotes() {
+        return mascotes;
     }
 
-    public void setUnisex(boolean unisex) {
-        this.unisex = unisex;
+    public void setMascotes(Boolean mascotes) {
+        this.mascotes = mascotes;
     }
+
+    
     
     
 
@@ -86,9 +85,6 @@ public class Requeriment implements Serializable{
         }
     }
     
-    
-    
-
     public boolean isFumador() {
         return fumador;
     }
@@ -107,16 +103,9 @@ public class Requeriment implements Serializable{
 
     @Override
     public String toString() {
-        return "Requeriment{" + "home=" + home + ", dona=" + dona + ", unisex=" + unisex + ", rangEdatMin=" + rangEdatMin + ", rangEdatMax=" + rangEdatMax + ", fumador=" + fumador + ", mascotes=" + mascotes + '}';
+        return "Requeriment{" + "sexe=" + sexe + ", rangEdatMin=" + rangEdatMin + ", rangEdatMax=" + rangEdatMax + ", fumador=" + fumador + ", mascotes=" + mascotes + '}';
     }
 
-    
-
-    
-    
-   
-    
-    
-    
+       
     
 }

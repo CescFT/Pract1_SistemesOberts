@@ -28,6 +28,7 @@ import org.json.*;
 import model.entities.Habitacio;
 import model.entities.Llogater;
 import model.entities.Requeriment;
+import model.entities.SexeLlogater;
 import model.entities.informacioLlogater;
 
 /**
@@ -165,11 +166,11 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
         if(!compleix)
             return false;
         else{
-            if(reqHab.isUnisex())
+            if(reqHab.getSexe() == SexeLlogater.UNISEX)
                 return true;
-            else if(infoLlogater.isDona() == reqHab.isDona())
+            else if(infoLlogater.getSexe() == reqHab.getSexe())
                 return true;
-            else if (infoLlogater.isHome() == reqHab.isHome())
+            else if (infoLlogater.getSexe()== reqHab.getSexe())
                 return true;
         }
         return false;
