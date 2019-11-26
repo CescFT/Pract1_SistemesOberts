@@ -38,61 +38,18 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
                                                  //Lo de lab10_wspu esta dins del fitxer persistence.xml a <persistence-unit>
     private EntityManager em;
     
-    private token token;
-    
-    private credentialsClient client;
+   
 
     public HabitacioFacadeREST() {
         super(Habitacio.class);
     }
-    
-    private void setClient(credentialsClient cli){
-        this.client = cli;
-    }
-    
-    private credentialsClient getClient(){
-        return this.client;
-    }
-    
-    private void setToken(token token){
-        this.token=token;
-    }
-    
-    private token getToken(){
-        return this.token;
-    }
-    
-    
-    @POST
-    @Path("/processarToken")
-    @Consumes({"application/json"})
-    @Produces({"application/json"})
-    public Response processamentProva(token json){
-        
-        System.out.println("::dada entrada"+json);
-        try{
-                if(super.tokenVerificat(json)){
-                this.setToken(json);
-                this.setClient(super.whoDoneThisPetition(this.getToken()));
-                return Response.ok().entity("Token emmagatzemat correctament:\n\n"+this.getToken()+"\nUsuari:"+this.getClient().getUsername()).build();
-            }else{
-                return Response.status(Response.Status.BAD_REQUEST).entity("El token no es correcte").build();
-            }
-        }catch(Exception e){
-            return Response.status(Response.Status.BAD_REQUEST).entity("Hi ha hagut algun error al processar el token.").build();
-        }
-        
-        
-    }
-    
-    
+       
 
     @POST
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    public Response createHabitacio(Habitacio entity, @FormParam("token") String token) {
-        token tk = new token();
-        tk.setTokenAutoritzacio(token);
-        if(super.tokenVerificat(tk)){
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response createHabitacio(Habitacio entity) {
+        
+        
                 if(entity == null)
                 return Response.status(Response.Status.PRECONDITION_FAILED).entity("No ve un JSON informat").build();
             else{
@@ -101,32 +58,23 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
                 System.out.println(entity.toString());
                 return Response.status(Response.Status.CREATED).entity("Nova entrada\n"+entity.toString()+"\nAfegida correctament.").build();
             }
-        }else{
-            return Response.status(Response.Status.BAD_REQUEST).entity("token invàlid o no t'has autenticat").build();
-        }
+        
         
        
     }
 
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_FORM_URLENCODED})
-    public Response editHabitacio(Habitacio entity, @FormParam("token") String token) {
-        token tk = new token();
-        tk.setTokenAutoritzacio(token);
-        if(super.tokenVerificat(tk)){
-                if(entity == null)
-                return Response.status(Response.Status.PRECONDITION_FAILED).entity("No ve un JSON informat").build();
-            else{
-                super.edit(entity);
-                System.out.println(entity);
-                return Response.ok().entity(entity+"\nha estat modificada correctament.").build();
-            }
-        }else{
-            return Response.status(Response.Status.BAD_REQUEST).entity("token invàlid o no t'has autenticat").build();
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response editHabitacio(Habitacio entity) {
+        
+            if(entity == null)
+            return Response.status(Response.Status.PRECONDITION_FAILED).entity("No ve un JSON informat").build();
+        else{
+            super.edit(entity);
+            System.out.println(entity);
+            return Response.ok().entity(entity+"\nha estat modificada correctament.").build();
         }
-        
-        
     }
 
     @DELETE
