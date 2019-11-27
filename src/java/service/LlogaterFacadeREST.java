@@ -285,14 +285,20 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     @Path("{id}")
     @Produces({"application/json"})
     public Response find(@PathParam("id") Integer id) {
-        if(token != null){
+        try{
+            if(token != null){
             Llogater tenant = super.find(Long.valueOf(id));
+            System.out.println(tenant);
             if (tenant != null){
                 return Response.ok().entity(tenant).build();
             }
             return Response.status(Response.Status.BAD_REQUEST).entity("Id no correcte").build();
         }else
             return Response.status(Response.Status.UNAUTHORIZED).entity("No t'has autenticat :(").build();
+        }catch(NullPointerException e){
+            return Response.status(Response.Status.BAD_REQUEST).entity("No s'ha trobat cap llogater amb aquesta ID.").build();
+        }
+        //return Response.ok().entity("hola").build();
     }
     
     /**
