@@ -1,20 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package service;
 
 import autenticacio.credentialsClient;
 import autenticacio.token;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -24,7 +17,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.json.*;
 import model.entities.Habitacio;
 import model.entities.Llogater;
 import model.entities.Requeriment;
@@ -32,39 +24,66 @@ import model.entities.SexeLlogater;
 import model.entities.informacioLlogater;
 
 /**
- *
+ * API REST per al llogaters
  * @author Cesc
  */
 @Stateless
 @Path("tenant")
 public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
-    @PersistenceContext(unitName = "Homework1PU") //Aixo fa que sigui un container, i no haver de fer us del commit i transaction i tot aixo
-                                                 //Lo de lab10_wspu esta dins del fitxer persistence.xml a <persistence-unit>
+    @PersistenceContext(unitName = "Homework1PU") 
+                                                 
     private EntityManager em;
     private token token;
     private credentialsClient client;
 
+    /**
+     * constructor classe
+     */
     public LlogaterFacadeREST() {
         super(Llogater.class);
         
     }
     
+    /**
+     * setter del client
+     * @param client client
+     */
     public void setClient(credentialsClient client){
         this.client = client;
     }
     
+    /**
+     * getter del client
+     * @return client
+     */
     public credentialsClient getClient(){
         return this.client;
     }
     
+    /**
+     * getter del token
+     * @return token
+     */
     private token getToken(){
         return this.token;
     }
     
+    /**
+     * setter del token
+     * @param token token
+     */
     private void setToken(token token){
         this.token = token;
     }
     
+    /**
+     * Mètode HTTP POST que permet lligar la autenticació amb la API REST pels llogaters.
+     * Emmagatzema el token per a poder executar els altres mètodes, s'executa quan la url és:
+     * /webresources/tenant/processarToken
+     * i es passa en json el token
+     * @param json token
+     * @return token emmagatzemat correctament o no si es invalid
+     */
     @POST
     @Path("/processarToken")
     @Consumes({"application/json"})
@@ -83,10 +102,16 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
         }catch(Exception e){
             return Response.status(Response.Status.BAD_REQUEST).entity("Hi ha hagut algun error al processar el token.").build();
         }
-        
-        
     }
 
+    /**
+     * Mètode HTTP POST que permet fer el renting d'un llogater a una habitació.
+     * S'executa quan la url és:
+     * /webresources/tenant/id/rent
+     * @param hab habitacio a llogar
+     * @param id identifiador del llogater
+     * @return la habitacio llogada
+     */
     @POST
     @Path("{id}/rent")
     @Consumes({"application/json"})
@@ -113,10 +138,15 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
 
         }else
             return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
-
     }
     
-    
+    /**
+     * Mètode privat que verifica si el tenant compleix els requeriments
+     * de la habitació i la pot llogar
+     * @param h habitacio
+     * @param ll llogater
+     * @return cert o fals
+     */
     private boolean comprovarRequeriments(Habitacio h, Llogater ll){
         informacioLlogater infoLlogater = ll.getInfo();
         Requeriment reqHab = h.getRequeriment();
@@ -142,11 +172,16 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
         return false;
     }
     
-    
-    
+    /**
+     * Mètode HTTP POST que crea un nou llogater a la base de dades.
+     * S'executa quan la url és:
+     * /webresources/tenant
+     * @param entity llogater en JSON
+     * @return llogater
+     */
     @POST
     @Consumes({"application/json"})
-    public Response createLlogater(Llogater entity) {       //OK
+    public Response createLlogater(Llogater entity) {
         
         if(token != null){
                 if(entity == null)
@@ -160,11 +195,17 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
         
     }
     
-
+    /**
+     * Mètode HTTP PUT que actualitza la informació de un llogater, es crida
+     * quan la url és:
+     * /webresources/tenant/id
+     * @param entity llogater en JSON
+     * @return el llogater actualitzat
+     */
     @PUT
     @Path("{id}")
     @Consumes({"application/json"})
-    public Response editLlogater(Llogater entity) {     //OK
+    public Response editLlogater(Llogater entity) {
         
        if(token != null){
            if(entity == null)
@@ -178,6 +219,13 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
 
     }
     
+    /**
+     * Mètode HTTP DELETE que allibera la habitacio i elimina el tenant.
+     * S'executa quan la url és:
+     * /webresources/tenant/alliberarHabitacio/id
+     * @param id identificador del tenant
+     * @return eliminacio del llogater de la habitacio i la eliminacio del tenant
+     */
     @DELETE
     @Path("alliberarHabitacio/{id}")
     public Response alliberarHabitacio(@PathParam("id") Integer id){
@@ -196,14 +244,18 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
             return Response.status(Response.Status.BAD_REQUEST).entity(id+" no disponible").build();
         }else
             return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
-        
-   
-
     }
 
+    /**
+     * Mètode HTTP DELETE que elimina el llogater de la base de dades,
+     * s'executa quan la url és:
+     * /webresources/tenant/id
+     * @param id identificador del tenant
+     * @return eliminacio del llogater
+     */
     @DELETE
     @Path("{id}")
-    public Response remove(@PathParam("id") Integer id) {       //OK
+    public Response remove(@PathParam("id") Integer id) {
         
         if(token != null){
             Llogater tenant = super.find(Long.valueOf(id));
@@ -222,10 +274,17 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
 
     }
 
+    /**
+     * Mètode HTTP GET que cerca la informació del llogater amb el id passat per paràmetre.
+     * Es crida quan la url és :
+     * /webresources/tenant/id
+     * @param id identificador del llogater
+     * @return llogater
+     */
     @GET
     @Path("{id}")
     @Produces({"application/json"})
-    public Response find(@PathParam("id") Integer id) { //OK
+    public Response find(@PathParam("id") Integer id) {
         if(token != null){
             Llogater tenant = super.find(Long.valueOf(id));
             if (tenant != null){
@@ -236,9 +295,15 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
             return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
     }
     
+    /**
+     * Mètode HTTP GET que retorna el llistat de totes les habitacions, s'executa
+     * quan la url és:
+     * /webresources/tenant
+     * @return llistat de les habitacions
+     */
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response listOfTenants(){    //OK
+    public Response listOfTenants(){
         
         if(token != null){
                 try{
@@ -258,12 +323,13 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
 
     }
 
+    /**
+     * getter del entity manager
+     * @return entity manager
+     */
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
-    
-    
     
 }

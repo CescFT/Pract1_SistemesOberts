@@ -5,12 +5,17 @@
         <group>
             <file>file:/D:/Pract1_SistemesOberts/src/java/model/entities/Requeriment.java</file>
             <file>file:/D:/Pract1_SistemesOberts/src/java/service/LlogaterFacadeREST.java</file>
-            <file>file:/D:/Pract1_SistemesOberts/web/install.jsp</file>
-            <file>file:/D:/Pract1_SistemesOberts/src/java/model/entities/Habitacio.java</file>
-            <file>file:/D:/Pract1_SistemesOberts/src/java/model/entities/SexeLlogater.java</file>
-            <file>file:/D:/Pract1_SistemesOberts/src/java/model/entities/Llogater.java</file>
+            <file>file:/D:/Pract1_SistemesOberts/src/java/autenticacio/token.java</file>
+            <file>file:/D:/Pract1_SistemesOberts/src/java/service/AbstractFacade.java</file>
             <file>file:/D:/Pract1_SistemesOberts/src/java/model/entities/TipusHabitacio.java</file>
             <file>file:/D:/Pract1_SistemesOberts/src/java/model/entities/informacioLlogater.java</file>
+            <file>file:/D:/Pract1_SistemesOberts/web/install.jsp</file>
+            <file>file:/D:/Pract1_SistemesOberts/src/java/autenticacio/credentialsClient.java</file>
+            <file>file:/D:/Pract1_SistemesOberts/src/java/model/entities/Habitacio.java</file>
+            <file>file:/D:/Pract1_SistemesOberts/src/java/service/HabitacioFacadeREST.java</file>
+            <file>file:/D:/Pract1_SistemesOberts/src/java/service/autenticacioClientWeb.java</file>
+            <file>file:/D:/Pract1_SistemesOberts/src/java/model/entities/SexeLlogater.java</file>
+            <file>file:/D:/Pract1_SistemesOberts/src/java/model/entities/Llogater.java</file>
         </group>
     </open-files>
 </project-private>

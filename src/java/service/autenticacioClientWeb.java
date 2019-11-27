@@ -49,6 +49,8 @@ public class autenticacioClientWeb extends AbstractFacade<credentialsClient>{
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response authenticationClient(@FormParam("username") String username,
             @FormParam("password") String passwd){
+        System.out.println(username);
+        System.out.println(passwd);
         if(username == null || passwd == null)
             return Response.status(Response.Status.FORBIDDEN).entity("Falta usuari o contrassenya").build();
         try{
@@ -69,6 +71,17 @@ public class autenticacioClientWeb extends AbstractFacade<credentialsClient>{
             return Response.status(Response.Status.FORBIDDEN).build();
         }
                
+    }
+    
+    @GET
+    @Path("{username}")
+    @Produces({"application/json"})
+    public Response getTokenOfUsername(@PathParam("username") String username){
+        credentialsClient c = super.findClientAutoritizat(username);
+        if(c == null)
+            return Response.status(Response.Status.BAD_REQUEST).entity("No es troba aquest usuari web").build();
+        else
+            return Response.ok().entity(c).build();
     }
     
     @GET
@@ -134,6 +147,7 @@ public class autenticacioClientWeb extends AbstractFacade<credentialsClient>{
     
     private boolean authenticateClient(String username, String passwd) throws Exception{
         credentialsClient c = super.findClientAutoritizat(username); 
+        System.out.println(c);
         if(c==null)
             return false;
         else{

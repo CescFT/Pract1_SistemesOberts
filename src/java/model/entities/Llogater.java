@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model.entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
+
 /**
- *
+ * Classe entitat que representa el llogater
  * @author Cesc
  */
 @Entity
@@ -30,34 +26,59 @@ public class Llogater implements Serializable{
     @OneToOne(mappedBy="llogater")
     private Habitacio habitacio;
 
+    /**
+     * getter de la habitacio
+     * @return habitacio
+     */
     public Habitacio getHabitacio() {
         return habitacio;
     }
 
+    /**
+     * setter de la habitacio
+     * @param habitacio habitacio
+     */
     public void setHabitacio(Habitacio habitacio) {
         this.habitacio = habitacio;
     }
-    
-    
-    
-    
-    
+
+    /**
+     * getter del identificador
+     * @return identificador
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * setter del identificador
+     * @param id identificador
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * getter de la informacio del llogater
+     * @return informacio del llogater
+     */
     public informacioLlogater getInfo() {
         return info;
     }
 
+    /**
+     * setter de la informacio del llogater
+     * @param info informacio del llogater
+     */
     public void setInfo(informacioLlogater info) {
         this.info = info;
     }
-
+    
+    /**
+     * override del equals
+     * @param object objecte a comparar
+     * @return cert si igual, fals si no son iguals
+     */
     @Override
     public boolean equals(Object object) {
         if (!(object instanceof Llogater)) {
@@ -70,6 +91,10 @@ public class Llogater implements Serializable{
         return true;
     }
 
+    /**
+     * calcul del hashcode
+     * @return hash
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -77,6 +102,10 @@ public class Llogater implements Serializable{
         return hash;
     }
 
+    /**
+     * tostring
+     * @return string
+     */
     @Override
     public String toString() {
         return "Llogater{" + "id=" + id + ", info=" + info + '}';

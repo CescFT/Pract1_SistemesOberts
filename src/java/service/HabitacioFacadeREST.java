@@ -1,11 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package service;
 
-import autenticacio.credentialsClient;
-import autenticacio.token;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -13,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -28,23 +21,30 @@ import model.entities.Habitacio;
 
 
 /**
- *
- * @author Administrador
+ * API REST per a les habitacions, hereta de Abstract facade
+ * @author Cesc
  */
 @Stateless
 @Path("/room")
 public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
-    @PersistenceContext(unitName = "Homework1PU") //Aixo fa que sigui un container, i no haver de fer us del commit i transaction i tot aixo
-                                                 //Lo de lab10_wspu esta dins del fitxer persistence.xml a <persistence-unit>
+    @PersistenceContext(unitName = "Homework1PU") 
+                                                 
     private EntityManager em;
     
-   
-
+   /**
+    * Constructor de la habitacio
+    */
     public HabitacioFacadeREST() {
         super(Habitacio.class);
     }
        
-
+    /**
+     * Mètode HTTP POST per a generar una nova habitacio en base a un JSON, es
+     * crida quan la url és:
+     * /webresources/room
+     * @param entity habitacio
+     * @return la habitacio emmagatzemada
+     */
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     public Response createHabitacio(Habitacio entity) {
@@ -63,6 +63,13 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
        
     }
 
+    /**
+     * Mètode HTTP PUT que fa un update de la habitacio amb id passada
+     * pel path. Es crida quan es fa:
+     * /webresources/room/id
+     * @param entity habitacio 
+     * @return la habitacio modificada
+     */
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON})
@@ -77,9 +84,15 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
         }
     }
 
+    /**
+     * Mètode HTTP DELETE que elimina la habitació passada per paràmetre,
+     * es crida quan la url és:
+     * /webresources/room/id
+     * @param id identificador
+     * @return eliminacio de la habitacio
+     */
     @DELETE
     @Path("{id}")
-    //posar com a metode DELETE i la url: http://localhost:8080/Pract1_SistemesOberts/webresources/room/id
     public Response remove(@PathParam("id") Integer id) {
         
         Habitacio hab = super.find(Long.valueOf(id));
@@ -91,12 +104,16 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
         return Response.status(Response.Status.BAD_REQUEST).entity("Id no disponible").build();
     }
     
-    
-    
+    /**
+     * Mètode HTTP GET que s'executa quan la url és:
+     * /webresources/room/id
+     * Retorna tota la informació de la  habitació amb id passada pel path param
+     * @param id identificador habitacio
+     * @return la informacio de tota la habitacio
+     */
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    //http://localhost:8080/Pract1_SistemesOberts/webresources/room/id
     public Response find(@PathParam("id") Integer id) {
         if(id == null)
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -109,10 +126,18 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
         
     }
     
+    /**
+     * Mètode HTTP GET executat quan la URL es:
+     *  /webresources/room?location=Vallsandsort=asc
+     *  /webresources/room?locationandsort=asc 
+     * Retorna les habitacions d'una ciutat ordenades ascendentment o descendentment
+     * en funció del segon paràmetre. El query param obligatori és el sort.
+     * @param location ciutat
+     * @param criterion sort
+     * @return llistat de habitacions de la ciutat passada per parametre o totes si no esta
+     */
     @GET
     @Produces({"application/json"})
-    //http://localhost:8080/Pract1_SistemesOberts/webresources/room?location=Valls&sort=asc
-    //http://localhost:8080/Pract1_SistemesOberts/webresources/room?location&sort=asc   
     public Response find(@QueryParam("location") String location,@QueryParam("sort") String criterion) {
         List<Habitacio> llistaHabitacions = new ArrayList<Habitacio>();
         if(criterion==null){
@@ -137,11 +162,18 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
         
     }
     
-    
+    /**
+     * Mètode privat que et retorna totes les habitacions
+     * @return llistat de totes les habitacions
+     */
     private List<Habitacio> totesHabitacions(){
         return super.findAll();
     }
 
+    /**
+     * getter del entity manager
+     * @return entity manager
+     */
     @Override
     protected EntityManager getEntityManager() {
         return em;
