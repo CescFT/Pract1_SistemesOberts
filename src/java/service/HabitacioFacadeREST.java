@@ -53,7 +53,6 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
             else{
                 //mirar els camps q s'omplen buits i omplir-los jo!
                 super.create(entity);
-                System.out.println(entity.toString());
                 return Response.status(Response.Status.CREATED).entity("Nova entrada\n"+entity+"\nAfegida correctament.").build();
             }
     }
@@ -73,7 +72,6 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
             return Response.status(Response.Status.NO_CONTENT).entity("No ve un JSON informat").build();
         else{
             super.edit(entity);
-            System.out.println(entity);
             return Response.ok().entity(entity+"\nha estat modificada correctament.").build();
         }
     }
@@ -115,7 +113,7 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
         if(hab != null){
             return Response.ok(hab, MediaType.APPLICATION_JSON).build();
         }else {
-            return Response.status(Response.Status.NOT_FOUND).entity("ID: "+id+" no disponible.").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("ID: "+id+" no disponible.").build();
         }
         
     }
@@ -151,7 +149,7 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
             GenericEntity<List<Habitacio>> llista = new GenericEntity<List<Habitacio>>(llistaHabitacions){};
             return Response.ok().entity(llista).build();
         }catch(NullPointerException e){
-            return Response.status(Response.Status.NOT_FOUND).entity("null "+criterion+" "+location).build();
+            return Response.status(Response.Status.NO_CONTENT).entity("null "+criterion+" "+location).build();
         }
         
     }

@@ -238,7 +238,7 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
                     hab.setLlogater(null);
                     getEntityManager().merge(hab);
                     super.remove(tenant);
-                    return Response.ok().entity("Llogater "+tenant+"\n\n eliminat correctament.").build();
+                    return Response.ok().entity("Llogater eliminat correctament i la habitacio ara es lliure.").build();
                 }
             }
             return Response.status(Response.Status.NO_CONTENT).entity(id+" no disponible").build();
@@ -264,7 +264,7 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
                     return Response.status(Response.Status.PARTIAL_CONTENT).entity("No es pot esborrar perque té una habitacio.").build();
                 else{
                     super.remove(tenant);
-                    return Response.ok().entity("Llogater "+tenant+"\n eliminat").build();
+                    return Response.ok().entity("Llogater eliminat.").build();
                 }
 
             }
