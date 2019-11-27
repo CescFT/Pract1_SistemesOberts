@@ -88,7 +88,7 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     @Path("/processarToken")
     @Consumes({"application/json"})
     @Produces({"application/json"})
-    public Response processamentProva(token json){
+    public Response processamentProva(token json){ 
         
         System.out.println("::dada entrada"+json);
         try{
@@ -97,10 +97,10 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
                 this.setClient(super.whoDoneThisPetition(this.getToken()));
                 return Response.ok().entity("Token emmagatzemat correctament:\n\n"+this.getToken()+"\nUsuari:"+this.getClient().getUsername()).build();
             }else{
-                return Response.status(Response.Status.BAD_REQUEST).entity("El token no es correcte").build();
+                return Response.status(Response.Status.NO_CONTENT).entity("El token no es correcte").build();
             }
         }catch(Exception e){
-            return Response.status(Response.Status.BAD_REQUEST).entity("Hi ha hagut algun error al processar el token.").build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Hi ha hagut algun error al processar el token.").build();
         }
     }
 
@@ -115,16 +115,16 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     @POST
     @Path("{id}/rent")
     @Consumes({"application/json"})
-    public Response rentingRoom(Habitacio hab, @PathParam("id") Integer id){
+    public Response rentingRoom(Habitacio hab, @PathParam("id") Integer id){    
         
         if(token != null){
                 if(hab ==null)
-                return Response.status(Response.Status.NOT_FOUND).entity("Per a fer anar aquest mètode has de passar una habitacio en JSON!").build();
+                return Response.status(Response.Status.NO_CONTENT).entity("Per a fer anar aquest mètode has de passar una habitacio en JSON!").build();
             if(id == null)
-                return Response.status(Response.Status.BAD_REQUEST).entity("ID nul, no es pot fer renting").build();
+                return Response.status(Response.Status.NO_CONTENT).entity("ID nul, no es pot fer renting").build();
             Llogater llogater = super.find(Long.valueOf(id));
             if(llogater == null)
-                return Response.status(Response.Status.NOT_FOUND).entity("El llogater amb id: "+id+" no es troba a la base de dades.").build();
+                return Response.status(Response.Status.NO_CONTENT).entity("El llogater amb id: "+id+" no es troba a la base de dades.").build();
             else{
                   if(comprovarRequeriments(hab, llogater)){
                       Habitacio hab1 = super.findWithId(hab.getIdHabitacio());
@@ -133,11 +133,11 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
                       getEntityManager().merge(hab1);
                       return Response.status(Response.Status.CREATED).entity(hab1+"\n\nHa estat llogada per: "+llogater+"\n\nOperació finalitada.").build();
                   }else
-                      return Response.status(Response.Status.CONFLICT).entity("No compleix els requisits.").build();
+                      return Response.status(Response.Status.NO_CONTENT).entity("No compleix els requisits.").build();
             }
 
         }else
-            return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity("No t'has autenticat :(").build();
     }
     
     /**
@@ -181,17 +181,17 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
      */
     @POST
     @Consumes({"application/json"})
-    public Response createLlogater(Llogater entity) {
+    public Response createLlogater(Llogater entity) {   
         
         if(token != null){
                 if(entity == null)
-                return Response.status(Response.Status.BAD_REQUEST).entity("No es pot generar perquè no hi ha un JSON vàlid o informat").build();
+                return Response.status(Response.Status.NO_CONTENT).entity("No es pot generar perquè no hi ha un JSON vàlid o informat").build();
             else{
                 super.create(entity);
                 return Response.status(Response.Status.CREATED).entity("Llogater:\n "+entity+"\ncreat amb èxit.").build();
             }
         }else
-            return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity("No t'has autenticat :(").build();
         
     }
     
@@ -205,17 +205,17 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     @PUT
     @Path("{id}")
     @Consumes({"application/json"})
-    public Response editLlogater(Llogater entity) {
+    public Response editLlogater(Llogater entity) {    
         
        if(token != null){
            if(entity == null)
-                return Response.status(Response.Status.BAD_REQUEST).entity("No hi ha JSON informat o és invàlid").build();
+                return Response.status(Response.Status.NO_CONTENT).entity("No hi ha JSON informat o és invàlid").build();
             else{
                 super.edit(entity);
-                return Response.status(Response.Status.GONE).entity("Llogater "+entity+"\n\n modificat correctament.").build();
+                return Response.ok().entity("Llogater "+entity+"\n\n modificat correctament.").build();
             }
        }else
-            return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity("No t'has autenticat :(").build();
 
     }
     
@@ -238,12 +238,12 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
                     hab.setLlogater(null);
                     getEntityManager().merge(hab);
                     super.remove(tenant);
-                    return Response.status(Response.Status.FOUND).entity("Llogater "+tenant+"\n\n eliminat correctament.").build();
+                    return Response.ok().entity("Llogater "+tenant+"\n\n eliminat correctament.").build();
                 }
             }
-            return Response.status(Response.Status.BAD_REQUEST).entity(id+" no disponible").build();
+            return Response.status(Response.Status.NO_CONTENT).entity(id+" no disponible").build();
         }else
-            return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity("No t'has autenticat :(").build();
     }
 
     /**
@@ -255,22 +255,22 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
      */
     @DELETE
     @Path("{id}")
-    public Response remove(@PathParam("id") Integer id) {
+    public Response remove(@PathParam("id") Integer id) {  
         
         if(token != null){
             Llogater tenant = super.find(Long.valueOf(id));
             if (tenant != null){
                 if(super.isTenant(super.findAllRooms(), tenant))
-                    return Response.status(Response.Status.FOUND).entity("No es pot esborrar perque té una habitacio.").build();
+                    return Response.status(Response.Status.PARTIAL_CONTENT).entity("No es pot esborrar perque té una habitacio.").build();
                 else{
                     super.remove(tenant);
                     return Response.ok().entity("Llogater "+tenant+"\n eliminat").build();
                 }
 
             }
-            return Response.status(Response.Status.BAD_REQUEST).entity(id+" no disponible").build();
+            return Response.status(Response.Status.NO_CONTENT).entity(id+" no disponible").build();
         }else
-            return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity("No t'has autenticat :(").build();
 
     }
 
@@ -292,7 +292,7 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
             }
             return Response.status(Response.Status.BAD_REQUEST).entity("Id no correcte").build();
         }else
-            return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity("No t'has autenticat :(").build();
     }
     
     /**
@@ -316,10 +316,10 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
                 return Response.ok().entity(llista).build();
             }
             }catch(NullPointerException e){
-                return Response.status(Response.Status.NOT_FOUND).entity("ouuuuh fuck").build();
+                return Response.status(Response.Status.NO_CONTENT).entity("No hi ha llogaters, llista nula").build();
             }
         }else
-            return Response.status(Response.Status.BAD_REQUEST).entity("No t'has autenticat :(").build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity("No t'has autenticat :(").build();
 
     }
 

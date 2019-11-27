@@ -48,19 +48,14 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     public Response createHabitacio(Habitacio entity) {
-        
-        
                 if(entity == null)
-                return Response.status(Response.Status.PRECONDITION_FAILED).entity("No ve un JSON informat").build();
+                return Response.status(Response.Status.NO_CONTENT).entity("No ve un JSON informat.").build();
             else{
                 //mirar els camps q s'omplen buits i omplir-los jo!
                 super.create(entity);
                 System.out.println(entity.toString());
-                return Response.status(Response.Status.CREATED).entity("Nova entrada\n"+entity.toString()+"\nAfegida correctament.").build();
+                return Response.status(Response.Status.CREATED).entity("Nova entrada\n"+entity+"\nAfegida correctament.").build();
             }
-        
-        
-       
     }
 
     /**
@@ -74,9 +69,8 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response editHabitacio(Habitacio entity) {
-        
             if(entity == null)
-            return Response.status(Response.Status.PRECONDITION_FAILED).entity("No ve un JSON informat").build();
+            return Response.status(Response.Status.NO_CONTENT).entity("No ve un JSON informat").build();
         else{
             super.edit(entity);
             System.out.println(entity);
@@ -98,10 +92,10 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
         Habitacio hab = super.find(Long.valueOf(id));
         if(hab!= null){
             super.remove(hab);
-            return Response.ok().entity("Habitacio \n"+hab+"\n esborrada correctament.").build();
+            return Response.ok().entity("Habitacio esborrada correctament!").build();
         }
         
-        return Response.status(Response.Status.BAD_REQUEST).entity("Id no disponible").build();
+        return Response.status(Response.Status.NO_CONTENT).entity("Id no disponible").build();
     }
     
     /**
