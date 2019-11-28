@@ -17,6 +17,9 @@ public class informacioLlogater implements Serializable{
     @Column(name="COGNOM_LLOGATER") @Size(max=500)
     private String cognom;
     
+    @Column(name="NIF") @Size(max=500)
+    private String dni;
+        
     @Column(name="EDAT_LLOGATER")
     private int edat;
     
@@ -27,6 +30,16 @@ public class informacioLlogater implements Serializable{
     @Enumerated(EnumType.STRING)
     private SexeLlogater sexe;
 
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    
+    
     /**
      * getter de la edat
      * @return edat del llogater

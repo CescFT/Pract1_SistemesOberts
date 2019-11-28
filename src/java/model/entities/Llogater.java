@@ -23,24 +23,7 @@ public class Llogater implements Serializable{
     @Embedded
     private informacioLlogater info;
     
-    @OneToOne(mappedBy="llogater")
-    private Habitacio habitacio;
-
-    /**
-     * getter de la habitacio
-     * @return habitacio
-     */
-    public Habitacio getHabitacio() {
-        return habitacio;
-    }
-
-    /**
-     * setter de la habitacio
-     * @param habitacio habitacio
-     */
-    public void setHabitacio(Habitacio habitacio) {
-        this.habitacio = habitacio;
-    }
+    
 
     /**
      * getter del identificador

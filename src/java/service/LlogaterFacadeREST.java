@@ -287,19 +287,23 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     public Response find(@PathParam("id") Integer id) {
         try{
             if(token != null){
-            Llogater tenant = super.find(Long.valueOf(id));
-            System.out.println(tenant);
-            if (tenant != null){
-                return Response.ok().entity(tenant).build();
+                Llogater tenant = super.find(Long.valueOf(id));
+                System.out.println(tenant);
+                if (tenant != null){
+                    System.out.println("OK");
+                    return Response.ok().entity((Llogater)tenant).build();
+                }else{
+                    return Response.status(Response.Status.BAD_REQUEST).entity("Id no correcte").build();
+                }
             }
-            return Response.status(Response.Status.BAD_REQUEST).entity("Id no correcte").build();
-        }else
             return Response.status(Response.Status.UNAUTHORIZED).entity("No t'has autenticat :(").build();
+            
         }catch(NullPointerException e){
             return Response.status(Response.Status.BAD_REQUEST).entity("No s'ha trobat cap llogater amb aquesta ID.").build();
         }
         //return Response.ok().entity("hola").build();
     }
+    
     
     /**
      * Mètode HTTP GET que retorna el llistat de totes les habitacions, s'executa
