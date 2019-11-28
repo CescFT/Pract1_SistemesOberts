@@ -67,10 +67,15 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response editHabitacio(Habitacio entity) {
-            if(entity == null)
+    public Response editHabitacio(@PathParam("id") Integer id, Habitacio entity) {
+        if(id == null)
+            return Response.status(Response.Status.NO_CONTENT).entity("No hi ha un id informat").build();
+        Habitacio h = super.find(Long.valueOf(id));
+        if(entity == null)
             return Response.status(Response.Status.NO_CONTENT).entity("No ve un JSON informat").build();
         else{
+            if(h == null)
+                return Response.status(Response.Status.NO_CONTENT).entity("No hi ha cap habitació amb aquest id").build();
             super.edit(entity);
             return Response.ok().entity(entity+"\nha estat modificada correctament.").build();
         }
@@ -86,7 +91,8 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
     @DELETE
     @Path("{id}")
     public Response remove(@PathParam("id") Integer id) {
-        
+        if(id == null)
+            return Response.status(Response.Status.NO_CONTENT).entity("Id no informat").build();
         Habitacio hab = super.find(Long.valueOf(id));
         if(hab!= null){
             super.remove(hab);
