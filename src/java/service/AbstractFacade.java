@@ -228,10 +228,12 @@ public abstract class AbstractFacade<T> {
     public credentialsClient whoDoneThisPetition(token token){
         credentialsClient c = new credentialsClient();
         List<credentialsClient> llistaClients = findAllClientsAutoritzats();
-        for(credentialsClient cli : llistaClients){
-            if(cli.getTokenAutoritzacio().compararTokens(token)){
-                c = cli;
-                break;
+        for(credentialsClient cli: llistaClients){
+            if (cli.getTokenAutoritzacio() != null){
+                if(cli.getTokenAutoritzacio().compararTokens(token)){
+                    c = cli;
+                    break;
+                }
             }
         }
         return c;
@@ -269,8 +271,9 @@ public abstract class AbstractFacade<T> {
             }
             
             if(trobat){
-                if(!token.getTokenAutoritzacio().contains("-"))
+                if(!token.getTokenAutoritzacio().contains("-")){
                     return false;
+                }
    
             }else
                 return false;

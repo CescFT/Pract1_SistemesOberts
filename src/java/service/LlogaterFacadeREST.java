@@ -92,7 +92,7 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
         
         System.out.println("::dada entrada"+json);
         try{
-                if(super.tokenVerificat(json)){
+            if(super.tokenVerificat(json)){
                 this.setToken(json);
                 this.setClient(super.whoDoneThisPetition(this.getToken()));
                 return Response.ok().entity("Token emmagatzemat correctament:\n\n"+this.getToken()+"\nUsuari:"+this.getClient().getUsername()).build();
@@ -151,11 +151,12 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
         informacioLlogater infoLlogater = ll.getInfo();
         Requeriment reqHab = h.getRequeriment();
         
-        boolean compleix = false;
-        if(infoLlogater.isTeMascotes() == reqHab.isMascotes()){
-            if(infoLlogater.isFumador() == reqHab.isFumador()){
-                if(infoLlogater.getEdat() >= reqHab.getRangEdatMin() && infoLlogater.getEdat()<=reqHab.getRangEdatMax())
-                    compleix=true;
+        boolean compleix = true;
+        
+        if ((reqHab.isMascotes() == false) && (infoLlogater.isTeMascotes() == true)){
+            if((reqHab.isFumador()== false) && (infoLlogater.isFumador()== true)){
+                if(infoLlogater.getEdat() < reqHab.getRangEdatMin() || infoLlogater.getEdat() > reqHab.getRangEdatMax())
+                    compleix=false;
             }
         }
         
@@ -165,8 +166,6 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
             if(reqHab.getSexe() == SexeLlogater.UNISEX)
                 return true;
             else if(infoLlogater.getSexe() == reqHab.getSexe())
-                return true;
-            else if (infoLlogater.getSexe()== reqHab.getSexe())
                 return true;
         }
         return false;
