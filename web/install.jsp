@@ -124,14 +124,38 @@
                 
                 
             };
-            for (String datum : dataHabitacions) {
-                if (stmt.executeUpdate(datum)<=0) {
-                    out.println("<span class='error'>Error inserting data: " + datum + "</span>");
-                    return;
-                }
-                out.println("<pre> -> " + datum + "<pre>");
-            }
             
+            String duplicate[] = new String[dataHabitacions.length];
+            int cont = 0;
+            int i = 0;
+            boolean trobat = false;
+            for (String datum : dataHabitacions){
+                i=0;
+                trobat = false;
+                while ((i<cont) && (!trobat)){
+                    if (datum.contains(duplicate[i])){
+                        trobat = true;
+                    }else{
+                        i++;
+                    }
+                }
+                if (!trobat){
+                    if (stmt.executeUpdate(datum)<0) {
+                        out.println("<span class='error'>Error inserting data: " + datum + "</span>");
+                        return;
+                    }else {
+                        ResultSet resu2 = stmt.executeQuery("SELECT ADREÇA FROM HABITACIO");
+                        cont = 0;
+                        while(resu2.next()){
+                            duplicate[cont] = String.valueOf(resu2.getString("ADREÇA"));
+                            cont++;
+                        }
+                    }
+                    out.println("<pre> -> " + datum + "<pre>");
+                }else{
+                   out.println("This entry is already entered.");
+                }
+            }
             
             List<String> idsHabitacions = new ArrayList<String>();
             ResultSet resu = stmt.executeQuery("SELECT HABITACIO_ID FROM HABITACIO");
