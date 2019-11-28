@@ -5,7 +5,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Classe entitat que representa el llogater
- * @author Cesc
+ * @author CescFT
+ * @author AleixSP
  */
 @Entity
 @XmlRootElement

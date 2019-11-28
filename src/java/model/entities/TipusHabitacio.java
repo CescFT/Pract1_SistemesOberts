@@ -2,7 +2,8 @@ package model.entities;
 
 /**
  * Classe enum que conté el tipus d'habitació disponible en la nostra web.
- * @author Cesc
+ * @author CescFT
+ * @author AleixSP
  */
 public enum TipusHabitacio {
     SIMPLE,

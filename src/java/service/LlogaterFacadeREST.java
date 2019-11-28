@@ -25,7 +25,8 @@ import model.entities.informacioLlogater;
 
 /**
  * API REST per al llogaters
- * @author Cesc
+ * @author CescFT
+ * @author AleixSP
  */
 @Stateless
 @Path("tenant")
@@ -204,10 +205,11 @@ public class LlogaterFacadeREST extends AbstractFacade<Llogater>{
     @PUT
     @Path("{id}")
     @Consumes({"application/json"})
-    public Response editLlogater(Llogater entity) {    
+    public Response editLlogater(@PathParam("id") Integer id, Llogater entity) {    
         
        if(token != null){
-           if(entity == null)
+           Llogater ll = super.find(Long.valueOf(id));
+           if(entity == null || ll==null)
                 return Response.status(Response.Status.NO_CONTENT).entity("No hi ha JSON informat o és invàlid").build();
             else{
                 super.edit(entity);

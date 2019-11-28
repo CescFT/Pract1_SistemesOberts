@@ -11,7 +11,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Classe entitat per a persistir les credencials del client web per a poder 
  * entrar als mètodes REST del llogater.
  * Emmagatzema el username, password i el correu electronic.
- * @author Cesc
+ * @author CescFT
+ * @author AleixSP
  */
 @Entity
 @XmlRootElement

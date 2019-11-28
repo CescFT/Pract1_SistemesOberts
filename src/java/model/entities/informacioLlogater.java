@@ -8,7 +8,8 @@ import javax.validation.constraints.Size;
 
 /**
  * Classe embedded que conte la informació per a un llogater
- * @author Cesc
+ * @author CescFT
+ * @author AleixSP
  */
 @Embeddable
 public class informacioLlogater implements Serializable{
@@ -30,16 +31,22 @@ public class informacioLlogater implements Serializable{
     @Enumerated(EnumType.STRING)
     private SexeLlogater sexe;
 
+    /**
+     * getter del dni
+     * @return dni
+     */
     public String getDni() {
         return dni;
     }
 
+    /**
+     * setter del dni
+     * @param dni dni
+     */
     public void setDni(String dni) {
         this.dni = dni;
     }
 
-    
-    
     /**
      * getter de la edat
      * @return edat del llogater

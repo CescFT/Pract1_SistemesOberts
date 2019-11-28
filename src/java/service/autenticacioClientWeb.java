@@ -14,7 +14,6 @@ import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import autenticacio.token;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -27,7 +26,8 @@ import javax.ws.rs.core.Response;
 
 /**
  *
- * @author Cesc
+ * @author CescFT
+ * @author AleixSP
  * 
  * Per tal de autenticar, quan executem el install.jsp, ens hem de quedar amb la password i el username que ens dona,
  * aixo es clau per a que ens retorni el token (únic per a cada sessió i persistent). Recordem que la contrassenya es xifra i es guarda a la bd, si la volem recuperar

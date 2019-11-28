@@ -13,7 +13,8 @@ import javax.validation.ConstraintViolation;
 /**
  * Classe pare de totes les API REST, conte el control del Entity Manager 
  * és a dir tot el container.
- * @author Cesc
+ * @author CescFT
+ * @author AleixSP
  */
 public abstract class AbstractFacade<T> {
     private Class<T> entityClass;

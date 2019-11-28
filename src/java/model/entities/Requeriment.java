@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 /**
  * Classe embedded que conte el requeriment d'una habitacio
- * @author Cesc
+ * @author CescFT
+ * @author AleixSP
  */
 @Embeddable
 public class Requeriment implements Serializable{

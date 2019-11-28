@@ -22,7 +22,8 @@ import model.entities.Habitacio;
 
 /**
  * API REST per a les habitacions, hereta de Abstract facade
- * @author Cesc
+ * @author CescFT
+ * @author AleixSP
  */
 @Stateless
 @Path("/room")

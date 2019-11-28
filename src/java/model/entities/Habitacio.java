@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Classe entitat que representa una habitacio i emmagatzema les dades
  * que es demanen a l'enunciat
  * @author Cesc
+ * @author Aleix
  */
 @Entity
 @XmlRootElement

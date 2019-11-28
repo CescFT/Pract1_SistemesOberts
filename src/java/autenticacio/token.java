@@ -7,7 +7,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Classe embedded que persisteix la informació sobre el token
- * @author Cesc
+ * @author CescFT
+ * @author AleixSP
  */
 @Embeddable
 @XmlRootElement
