@@ -1,55 +1,71 @@
 package model.entities;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import javax.validation.constraints.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
 /**
- * Classe entitat que representa una habitacio i emmagatzema les dades
- * que es demanen a l'enunciat
- * @author Cesc
- * @author Aleix
+ * Classe entitat que representa una habitacio i emmagatzema les dades que es
+ * demanen a l'enunciat
+ *
+ * @author Cesc Ferré Tarrés
+ * @author Aleix Sancho Pujals
  */
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name="room.findAllCondicionalASC", query="SELECT r FROM Habitacio r WHERE r.ciutat =:location ORDER BY r.preuMes ASC"), //criterion ha de ser ASC o DESC
-    @NamedQuery(name="room.findAllCondicionalDESC", query="SELECT r FROM Habitacio r WHERE r.ciutat =:location ORDER BY r.preuMes DESC"), //criterion ha de ser ASC o DESC
+    @NamedQuery(name = "room.findAllCondicionalASC", query = "SELECT r FROM Habitacio r WHERE r.ciutat =:location ORDER BY r.preuMes ASC")
+    , //criterion ha de ser ASC o DESC
+    @NamedQuery(name = "room.findAllCondicionalDESC", query = "SELECT r FROM Habitacio r WHERE r.ciutat =:location ORDER BY r.preuMes DESC")
+    , //criterion ha de ser ASC o DESC
     //@NamedQuery(name="room.findAll", query="SELECT r FROM Habitacio r ORDER BY r.preuMes :criterion"),
-    @NamedQuery(name="room.information", query="SELECT r FROM Habitacio r WHERE r.idHabitacio = :id"),
-    @NamedQuery(name="room.updateInfo", query="SELECT r FROM Habitacio r WHERE r.idHabitacio = :id"),
-    @NamedQuery(name="room.deleteInfo", query="SELECT r FROM Habitacio r WHERE r.idHabitacio = :id"),
-    @NamedQuery(name="room.allRooms", query="SELECT r FROM Habitacio r"),
-    @NamedQuery(name="room.allRoomsASC", query="SELECT r FROM Habitacio r ORDER BY r.preuMes ASC"),
-    @NamedQuery(name="room.allRoomsDESC", query="SELECT r FROM Habitacio r ORDER BY r.preuMes DESC")
+    @NamedQuery(name = "room.information", query = "SELECT r FROM Habitacio r WHERE r.idHabitacio = :id")
+    ,
+    @NamedQuery(name = "room.updateInfo", query = "SELECT r FROM Habitacio r WHERE r.idHabitacio = :id")
+    ,
+    @NamedQuery(name = "room.deleteInfo", query = "SELECT r FROM Habitacio r WHERE r.idHabitacio = :id")
+    ,
+    @NamedQuery(name = "room.allRooms", query = "SELECT r FROM Habitacio r")
+    ,
+    @NamedQuery(name = "room.allRoomsASC", query = "SELECT r FROM Habitacio r ORDER BY r.preuMes ASC")
+    ,
+    @NamedQuery(name = "room.allRoomsDESC", query = "SELECT r FROM Habitacio r ORDER BY r.preuMes DESC")
 })
-public class Habitacio implements Serializable{
+public class Habitacio implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    @Id @NotNull @Column(name="HABITACIO_ID") @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Habitacio_Gen")
+    @Id
+    @NotNull
+    @Column(name = "HABITACIO_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Habitacio_Gen")
     private Long idHabitacio;
-    @Size(max=500) @Column(name="DESCRIPCIO")
-    private String descripcio; 
-    @Column(name="ADREÇA") @Size(max=500)
+    @Size(max = 500)
+    @Column(name = "DESCRIPCIO")
+    private String descripcio;
+    @Column(name = "ADREÇA")
+    @Size(max = 500)
     private String adresa;
-    @Column(name="CIUTAT") @Size(max=500)
+    @Column(name = "CIUTAT")
+    @Size(max = 500)
     private String ciutat;
-    
+
     @Enumerated(EnumType.STRING)
-    @Column(name="TIPUS")
+    @Column(name = "TIPUS")
     private TipusHabitacio tipusHabitacio;
-    
-    @Column(name="PREU_MES")
+
+    @Column(name = "PREU_MES")
     private float preuMes;
-    
+
     @Embedded
-    private Requeriment requeriment; 
+    private Requeriment requeriment;
 
     @OneToOne
     private Llogater llogater;
-    
+
     /**
      * getter del tipus habitacio
+     *
      * @return tipus habitacio
      */
     public TipusHabitacio getTipusHabitacio() {
@@ -58,15 +74,16 @@ public class Habitacio implements Serializable{
 
     /**
      * setter del tipus habitacio
+     *
      * @param tipusHabitacio tipus habitacio
      */
     public void setTipusHabitacio(TipusHabitacio tipusHabitacio) {
         this.tipusHabitacio = tipusHabitacio;
     }
-    
 
     /**
      * getter del llogater
+     *
      * @return llogater
      */
     public Llogater getLlogater() {
@@ -75,21 +92,23 @@ public class Habitacio implements Serializable{
 
     /**
      * setter del llogater
+     *
      * @param llogater llogater
      */
     public void setLlogater(Llogater llogater) {
         this.llogater = llogater;
     }
-    
+
     /**
      * contructor buit
      */
     public Habitacio() {
-        
+
     }
 
     /**
      * getter del id
+     *
      * @return identificador de l'habitacio
      */
     public Long getIdHabitacio() {
@@ -98,6 +117,7 @@ public class Habitacio implements Serializable{
 
     /**
      * setter del id de l'habitacio
+     *
      * @param idHabitacio id habitacio
      */
     public void setIdHabitacio(Long idHabitacio) {
@@ -106,6 +126,7 @@ public class Habitacio implements Serializable{
 
     /**
      * getter de la descripcio
+     *
      * @return descripcio
      */
     public String getDescripcio() {
@@ -114,6 +135,7 @@ public class Habitacio implements Serializable{
 
     /**
      * setter de la descripcio
+     *
      * @param descripcio descripcio habitacio
      */
     public void setDescripcio(String descripcio) {
@@ -122,6 +144,7 @@ public class Habitacio implements Serializable{
 
     /**
      * getter de la adresa
+     *
      * @return adresa
      */
     public String getAdresa() {
@@ -130,6 +153,7 @@ public class Habitacio implements Serializable{
 
     /**
      * setter de la adresa
+     *
      * @param adresa adresa
      */
     public void setAdresa(String adresa) {
@@ -138,6 +162,7 @@ public class Habitacio implements Serializable{
 
     /**
      * getter de la ciutat
+     *
      * @return ciutat
      */
     public String getCiutat() {
@@ -146,6 +171,7 @@ public class Habitacio implements Serializable{
 
     /**
      * setter de la ciutat
+     *
      * @param ciutat ciutat
      */
     public void setCiutat(String ciutat) {
@@ -154,6 +180,7 @@ public class Habitacio implements Serializable{
 
     /**
      * getter del preu per mes
+     *
      * @return preu per mes
      */
     public float getPreuMes() {
@@ -162,6 +189,7 @@ public class Habitacio implements Serializable{
 
     /**
      * setter del preu per mes
+     *
      * @param preuMes preu per mes
      */
     public void setPreuMes(float preuMes) {
@@ -170,6 +198,7 @@ public class Habitacio implements Serializable{
 
     /**
      * getter del requeriment
+     *
      * @return requeriment
      */
     public Requeriment getRequeriment() {
@@ -178,14 +207,16 @@ public class Habitacio implements Serializable{
 
     /**
      * setter del requeriment
+     *
      * @param requeriment requeriment
      */
     public void setRequeriment(Requeriment requeriment) {
         this.requeriment = requeriment;
     }
-    
+
     /**
      * override de equals
+     *
      * @param object objecte a comparar
      * @return cert si iguals, fals si no son iguals
      */
@@ -203,17 +234,19 @@ public class Habitacio implements Serializable{
 
     /**
      * calcul del hashcode
+     *
      * @return hash
      */
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idHabitacio !=null ? idHabitacio.hashCode() : 0);
+        hash += (idHabitacio != null ? idHabitacio.hashCode() : 0);
         return hash;
     }
 
     /**
      * tostring
+     *
      * @return string
      */
     @Override
@@ -221,14 +254,4 @@ public class Habitacio implements Serializable{
         return "Habitacio{" + "idHabitacio=" + idHabitacio + ", descripcio=" + descripcio + ", adresa=" + adresa + ", ciutat=" + ciutat + ", tipusHabitacio=" + tipusHabitacio + ", preuMes=" + preuMes + ", requeriment=" + requeriment + ", llogater=" + llogater + '}';
     }
 
-   
-
-    
-
-    
-    
-    
-    
-    
-    
 }

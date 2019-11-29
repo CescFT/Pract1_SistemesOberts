@@ -1,4 +1,5 @@
 package model.entities;
+
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -8,31 +9,37 @@ import javax.validation.constraints.Size;
 
 /**
  * Classe embedded que conte la informació per a un llogater
- * @author CescFT
- * @author AleixSP
+ *
+ * @author Cesc Ferré Tarrés
+ * @author Aleix Sancho Pujals
  */
 @Embeddable
-public class informacioLlogater implements Serializable{
-    @Column(name="NOM_LLOGATER") @Size(max=500)
+public class informacioLlogater implements Serializable {
+
+    @Column(name = "NOM_LLOGATER")
+    @Size(max = 500)
     private String nom;
-    @Column(name="COGNOM_LLOGATER") @Size(max=500)
+    @Column(name = "COGNOM_LLOGATER")
+    @Size(max = 500)
     private String cognom;
-    
-    @Column(name="NIF") @Size(max=500)
+
+    @Column(name = "NIF")
+    @Size(max = 500)
     private String dni;
-        
-    @Column(name="EDAT_LLOGATER")
+
+    @Column(name = "EDAT_LLOGATER")
     private int edat;
-    
+
     private boolean fumador;
-    
+
     private boolean teMascotes;
-    
+
     @Enumerated(EnumType.STRING)
     private SexeLlogater sexe;
 
     /**
      * getter del dni
+     *
      * @return dni
      */
     public String getDni() {
@@ -41,6 +48,7 @@ public class informacioLlogater implements Serializable{
 
     /**
      * setter del dni
+     *
      * @param dni dni
      */
     public void setDni(String dni) {
@@ -49,22 +57,25 @@ public class informacioLlogater implements Serializable{
 
     /**
      * getter de la edat
+     *
      * @return edat del llogater
      */
     public int getEdat() {
         return edat;
     }
-    
+
     /**
-    * setter la edat
-    * @param edat edat del llogater
-    */
+     * setter la edat
+     *
+     * @param edat edat del llogater
+     */
     public void setEdat(int edat) {
         this.edat = edat;
     }
 
     /**
      * getter per saber si es fumador el llogater
+     *
      * @return cert o fals
      */
     public boolean isFumador() {
@@ -73,6 +84,7 @@ public class informacioLlogater implements Serializable{
 
     /**
      * setter per establir si fuma o no el llogater
+     *
      * @param fumador cert o fals
      */
     public void setFumador(boolean fumador) {
@@ -81,6 +93,7 @@ public class informacioLlogater implements Serializable{
 
     /**
      * getter per saber si te mascotes o no el llogater
+     *
      * @return cert o fals
      */
     public boolean isTeMascotes() {
@@ -89,6 +102,7 @@ public class informacioLlogater implements Serializable{
 
     /**
      * setter per saber el llogater te mascotes
+     *
      * @param teMascotes cert o fals
      */
     public void setTeMascotes(boolean teMascotes) {
@@ -97,6 +111,7 @@ public class informacioLlogater implements Serializable{
 
     /**
      * getter del nom del llogater
+     *
      * @return nom llogater
      */
     public String getNom() {
@@ -105,6 +120,7 @@ public class informacioLlogater implements Serializable{
 
     /**
      * setter del nom del llogater
+     *
      * @param nom nom llogater
      */
     public void setNom(String nom) {
@@ -113,6 +129,7 @@ public class informacioLlogater implements Serializable{
 
     /**
      * getter del cognom del llogater
+     *
      * @return cognom
      */
     public String getCognom() {
@@ -121,6 +138,7 @@ public class informacioLlogater implements Serializable{
 
     /**
      * setter del congnom
+     *
      * @param cognom cognnom
      */
     public void setCognom(String cognom) {
@@ -129,6 +147,7 @@ public class informacioLlogater implements Serializable{
 
     /**
      * getter del sexe del llogater
+     *
      * @return sexe
      */
     public SexeLlogater getSexe() {
@@ -137,6 +156,7 @@ public class informacioLlogater implements Serializable{
 
     /**
      * setter del sexe del llogater
+     *
      * @param sexe sexe llogater
      */
     public void setSexe(SexeLlogater sexe) {
@@ -145,12 +165,12 @@ public class informacioLlogater implements Serializable{
 
     /**
      * tostring
-     * @return string 
+     *
+     * @return string
      */
     @Override
     public String toString() {
         return "informacioLlogater{" + "nom=" + nom + ", cognom=" + cognom + ", edat=" + edat + ", fumador=" + fumador + ", teMascotes=" + teMascotes + ", sexe=" + sexe + '}';
     }
 
-       
 }

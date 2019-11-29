@@ -1,35 +1,37 @@
 package model.entities;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 /**
  * Classe embedded que conte el requeriment d'una habitacio
- * @author CescFT
- * @author AleixSP
+ *
+ * @author Cesc Ferré Tarrés
+ * @author Aleix Sancho Pujals
  */
 @Embeddable
-public class Requeriment implements Serializable{
-    
-    
-   @Enumerated(EnumType.STRING)
-   private SexeLlogater sexe;
-    
+public class Requeriment implements Serializable {
+
+    @Enumerated(EnumType.STRING)
+    private SexeLlogater sexe;
+
     private int rangEdatMin;
     private int rangEdatMax;
-    
+
     private Boolean fumador;
-    
+
     private Boolean mascotes;
-    
+
     /**
      * constructor buit
      */
-    public Requeriment(){
-        
+    public Requeriment() {
+
     }
 
     /**
      * getter del sexe del requirment
+     *
      * @return sexe del requeriment
      */
     public SexeLlogater getSexe() {
@@ -38,6 +40,7 @@ public class Requeriment implements Serializable{
 
     /**
      * setter del sexe del requiment
+     *
      * @param sexe sexe del requeriment
      */
     public void setSexe(SexeLlogater sexe) {
@@ -46,6 +49,7 @@ public class Requeriment implements Serializable{
 
     /**
      * getter de si accepta fumadors
+     *
      * @return cert si accepta o fals si no ho accepta
      */
     public Boolean getFumador() {
@@ -54,6 +58,7 @@ public class Requeriment implements Serializable{
 
     /**
      * setter de si accepta fumador
+     *
      * @param fumador cert o fals
      */
     public void setFumador(Boolean fumador) {
@@ -62,6 +67,7 @@ public class Requeriment implements Serializable{
 
     /**
      * getter de si accepta mascotes
+     *
      * @return cert si accepta, fals si no accepta
      */
     public Boolean getMascotes() {
@@ -70,6 +76,7 @@ public class Requeriment implements Serializable{
 
     /**
      * setter de si accepta mascotes
+     *
      * @param mascotes cert o fals
      */
     public void setMascotes(Boolean mascotes) {
@@ -78,6 +85,7 @@ public class Requeriment implements Serializable{
 
     /**
      * getter del rang minim edat
+     *
      * @return edat minima
      */
     public int getRangEdatMin() {
@@ -86,13 +94,17 @@ public class Requeriment implements Serializable{
 
     /**
      * setter del rang edat min
+     *
      * @param rangEdatMin edat minima
      */
     public void setRangEdatMin(int rangEdatMin) {
-        if(rangEdatMin < 0 ) this.rangEdatMin = 0;
-        else this.rangEdatMin = rangEdatMin;
-        
-        if(this.rangEdatMax < this.rangEdatMin){
+        if (rangEdatMin < 0) {
+            this.rangEdatMin = 0;
+        } else {
+            this.rangEdatMin = rangEdatMin;
+        }
+
+        if (this.rangEdatMax < this.rangEdatMin) {
             this.rangEdatMin = this.rangEdatMax;
             this.rangEdatMax = this.rangEdatMin;
         }
@@ -100,6 +112,7 @@ public class Requeriment implements Serializable{
 
     /**
      * getter del rang edat max
+     *
      * @return maxima edat
      */
     public int getRangEdatMax() {
@@ -108,20 +121,25 @@ public class Requeriment implements Serializable{
 
     /**
      * setter del rang edat max
+     *
      * @param rangEdatMax edat maxima
      */
     public void setRangEdatMax(int rangEdatMax) {
-        if(rangEdatMax > 99) this.rangEdatMax = 99;
-        else this.rangEdatMax = rangEdatMax;
-        
-        if(this.rangEdatMin > this.rangEdatMax){
+        if (rangEdatMax > 99) {
+            this.rangEdatMax = 99;
+        } else {
+            this.rangEdatMax = rangEdatMax;
+        }
+
+        if (this.rangEdatMin > this.rangEdatMax) {
             this.rangEdatMax = this.rangEdatMin;
             this.rangEdatMin = this.rangEdatMax;
         }
     }
-    
+
     /**
      * getter que retorna si accepta fumadors o no
+     *
      * @return cert si accepta o fals si no accepta
      */
     public boolean isFumador() {
@@ -130,6 +148,7 @@ public class Requeriment implements Serializable{
 
     /**
      * setter del requeriment per determinar si acceptem fumadors o no
+     *
      * @param fumador cert o fals
      */
     public void setFumador(boolean fumador) {
@@ -138,6 +157,7 @@ public class Requeriment implements Serializable{
 
     /**
      * getter que retorna si s'accepten mascotes o no
+     *
      * @return cert o fals
      */
     public boolean isMascotes() {
@@ -146,6 +166,7 @@ public class Requeriment implements Serializable{
 
     /**
      * setter per determinar si acceptem o no mascotes
+     *
      * @param mascotes cert o fals
      */
     public void setMascotes(boolean mascotes) {
@@ -154,6 +175,7 @@ public class Requeriment implements Serializable{
 
     /**
      * tostring
+     *
      * @return string
      */
     @Override

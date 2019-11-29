@@ -4,10 +4,11 @@ import javax.ws.rs.core.Application;
 
 /**
  * Classe per a desplegar la web
- * @author CescFT
- * @author AleixSP
+ *
+ * @author Cesc Ferré Tarrés
+ * @author Aleix Sancho Pujals
  */
 @javax.ws.rs.ApplicationPath("webresources")
 public class RESTapp extends Application {
-    
+
 }
