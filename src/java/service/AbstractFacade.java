@@ -174,12 +174,15 @@ public abstract class AbstractFacade<T> {
      */
     public List<Habitacio> findRoomsWithCriteria(String criteria) {
         TypedQuery<Habitacio> query;
+        System.out.println(criteria);
         if (criteria.toUpperCase().equals("ASC")) {
             query = (TypedQuery<Habitacio>) getEntityManager()
                     .createNamedQuery("room.allRoomsASC");
-        } else {
+        } else if (criteria.toUpperCase().equals("DESC")) {
             query = (TypedQuery<Habitacio>) getEntityManager()
                     .createNamedQuery("room.allRoomsDESC");
+        } else {
+            return null;
         }
         return query.getResultList();
     }
@@ -198,13 +201,19 @@ public abstract class AbstractFacade<T> {
             query = (TypedQuery<Habitacio>) getEntityManager()
                     .createNamedQuery("room.findAllCondicionalASC")
                     .setParameter("location", location);
-        } else {
+        } else if (criteria.toUpperCase().equals("DESC")) {
             query = (TypedQuery<Habitacio>) getEntityManager()
                     .createNamedQuery("room.findAllCondicionalDESC")
                     .setParameter("location", location);
+        } else {
+            return null;
+        }
+        if (query.getResultList().isEmpty()) {
+            return null;
+        } else {
+            return query.getResultList();
         }
 
-        return query.getResultList();
     }
 
     /**

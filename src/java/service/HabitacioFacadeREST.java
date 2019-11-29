@@ -160,9 +160,15 @@ public class HabitacioFacadeREST extends AbstractFacade<Habitacio> {
                 llistaHabitacions = super.findRoomsWithCriteria(criterion);
 
             }
-            GenericEntity<List<Habitacio>> llista = new GenericEntity<List<Habitacio>>(llistaHabitacions) {
-            };
-            return Response.ok().entity(llista).build();
+            if (llistaHabitacions != null) {
+                System.out.println(llistaHabitacions);
+                GenericEntity<List<Habitacio>> llista = new GenericEntity<List<Habitacio>>(llistaHabitacions) {
+                };
+                return Response.ok().entity(llista).build();
+            } else {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Cal introduir una location vàlida o un criteri vàlid(asc/desc).").build();
+            }
+
         } catch (NullPointerException e) {
             return Response.status(Response.Status.NO_CONTENT).entity("null " + criterion + " " + location).build();
         }
